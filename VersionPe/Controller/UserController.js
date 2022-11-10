@@ -128,12 +128,17 @@ export async function UpdateUser(req,res){
   const  { first_name , last_name, email , password } = req.body;
   const  encryptedPassword = await bcrypt.hash(password, 10);
     var user = await User.findOne({_id:req.params.id})
-    user.first_name=first_name;
-    user.last_name=last_name;
-    user.email=email;
-    user.password=encryptedPassword;
-    user.save();
-    res.status(200).json("Update ")
+    if(user)
+    {user.first_name=first_name;
+      user.last_name=last_name;
+      user.email=email;
+      user.password=encryptedPassword;
+      user.save();
+      res.status(200).json("Update ")
+    }else
+    res.status(404).json("Not found ")
+    
+    
 }
 
 
@@ -165,13 +170,14 @@ export async function forgetPass(req,res){
       const  encryptedPassword = await bcrypt.hash(password, 10);
       user.password=encryptedPassword;
       user.save();
+      res.send("password change sucessfully");
       
     }
     
    
    
 
-    res.send("password change sucessfully");
+    
   } catch (error) {
     console.log("prob");
   }
@@ -182,14 +188,39 @@ export async function forgetPass(req,res){
 
 export async function deleteUser(req,res){
   
-    const  id=req.params.id;
+    
+      try {
+        const  id=req.params.id;
   
-      var user = await User.findOneAndRemove({
-        _id:id,
-          first_name: req.body.first_name
-      })
-      res.status(200).json("Utulisateur Supprime")
+        var user = await User.findOne({_id:id})
+        if(!user)
+        res.status(404).json("User not found")
+
+        user.remove();
+        res.status(200).json("Utulisateur Supprime")
+      } catch (error) {
+        console.log("prob");
+      }
   
+}
+export async function GetUser(req,res){
+  
+  
+    try {
+
+      const  id=req.params.id;
+
+      var user = await User.findOne({_id:id})
+      if(user)
+      {
+        res.send(user)
+        res.status(200).json(user)
+      }else
+      res.status(404).json("user not found")
+    } catch (error) {
+      console.log("prob");
+    }
+
 }
 
 

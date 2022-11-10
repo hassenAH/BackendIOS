@@ -4,7 +4,26 @@ import mongoose from"mongoose";
 
 
 import dotenv from"dotenv" ;
+import swaggerJSDoc from 'swagger-jsdoc'
+import swaggerUi from 'swagger-ui-express'
 
+const options ={
+  definition: {
+    openapi : '3.0.0',
+    info :{
+      title :'Bizoz Project ',
+      version : '1.0.0'
+    },
+    servers:[
+      {
+        url: 'http://localhost:5000/'
+      }
+    ]
+  },
+  apis: ["./Routes/*.js"],
+}
+
+const swaggerSpec = swaggerJSDoc(options)
 
 dotenv.config({path:'./config/config.env'});
 
@@ -30,7 +49,7 @@ const port = process.env.PORT || 9090; // Le port du serveur
 app.use(express.json());
 
 app.use("/user", UserRoute);
-
+app.use('/api-docs',swaggerUi.serve,swaggerUi.setup(swaggerSpec))
 
 
 
