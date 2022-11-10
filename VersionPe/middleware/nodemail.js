@@ -2,7 +2,7 @@ import nodemailer from"nodemailer";
 
 
 
-const sendEmail = async (email, subject, text,code) => {
+const sendEmail = async (email, subject, text) => {
   try {
     const transporter = nodemailer.createTransport({
       pool: true,
@@ -18,7 +18,7 @@ const sendEmail = async (email, subject, text,code) => {
       from:  process.env.USER,
       to: email,
       subject: subject,
-      text: "this is your code for reset password    "  +code,
+      text: text,
     });
     console.log("email sent sucessfully");
   } catch (error) {
