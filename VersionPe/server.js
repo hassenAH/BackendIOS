@@ -6,6 +6,10 @@ import mongoose from"mongoose";
 import dotenv from"dotenv" ;
 import swaggerJSDoc from 'swagger-jsdoc'
 import swaggerUi from 'swagger-ui-express'
+import session from 'express-session'
+import passport from 'passport';
+import Google from 'passport-google-oauth2'
+const g =Google.Strategy;
 
 const options ={
   definition: {
@@ -50,6 +54,43 @@ app.use(express.json());
 
 app.use("/user", UserRoute);
 app.use('/api-docs',swaggerUi.serve,swaggerUi.setup(swaggerSpec))
+app.use(session({
+  secret: "secret",
+  resave: false ,
+  saveUninitialized: true ,
+}))
+app.use(passport.initialize()) // init passport on every route call
+app.use(passport.session())    //allow passport to use "express-session"
+const GOOGLE_CLIENT_ID = "825384301124-ildkjgm6nklsd5h1e71j33ac9apatd8i.apps.googleusercontent.com"
+const GOOGLE_CLIENT_SECRET = "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"
+authUser = (request, accessToken, refreshToken, profile, done) => {
+  return done(null, profile);
+}
+passport.use(new GoogleStrategy({
+  clientID:     GOOGLE_CLIENT_ID,
+  clientSecret: GOOGLE_CLIENT_SECRET,
+  callbackURL: "http://localhost:5000/auth/google/callback",
+  passReqToCallback   : true
+}, authUser));
+
+
+passport.serializeUser( (user, done) => { 
+  console.log(`\n--------> Serialize User:`)
+  console.log(user)
+   // The USER object is the "authenticated user" from the done() in authUser function.
+   // serializeUser() will attach this user to "req.session.passport.user.{user}", so that it is tied to the session object for each session.  
+
+  done(null, user)
+} )
+
+passport.deserializeUser((user, done) => {
+  console.log("\n--------- Deserialized User:")
+  console.log(user)
+  // This is the {user} that was saved in req.session.passport.user.{user} in the serializationUser()
+  // deserializeUser will attach this {user} to the "req.user.{user}", so that it can be used anywhere in the App.
+
+  done (null, user)
+}) 
 
 
 
@@ -58,3 +99,61 @@ app.use('/api-docs',swaggerUi.serve,swaggerUi.setup(swaggerSpec))
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}/`);
 });
+let count = 1
+showlogs = (req, res, next) => {
+    console.log("\n==============================")
+    console.log(`------------>  ${count++}`)
+
+    console.log(`\n req.session.passport -------> `)
+    console.log(req.session.passport)
+  
+    console.log(`\n req.user -------> `) 
+    console.log(req.user) 
+  
+    console.log("\n Session and Cookie")
+    console.log(`req.session.id -------> ${req.session.id}`) 
+    console.log(`req.session.cookie -------> `) 
+    console.log(req.session.cookie) 
+  
+    console.log("===========================================\n")
+
+    next()
+}
+
+app.use(showlogs)
+
+
+app.get('/auth/google',
+  passport.authenticate('google', { scope:
+      [ 'email', 'profile' ] }
+));
+
+app.get('/auth/google/callback',
+    passport.authenticate( 'google', {
+        successRedirect: '/dashboard',
+        failureRedirect: '/login'
+}));
+
+//Define the Login Route
+app.get("/login", (req, res) => {
+    res.render("login.ejs")
+})
+
+
+//Use the req.isAuthenticated() function to check if user is Authenticated
+checkAuthenticated = (req, res, next) => {
+  if (req.isAuthenticated()) { return next() }
+  res.redirect("/login")
+}
+
+//Define the Protected Route, by using the "checkAuthenticated" function defined above as middleware
+app.get("/dashboard", checkAuthenticated, (req, res) => {
+  res.render("dashboard.ejs", {name: req.user.displayName})
+})
+
+//Define the Logout
+app.post("/logout", (req,res) => {
+    req.logOut()
+    res.redirect("/login")
+    console.log(`-------> User Logged out`)
+})

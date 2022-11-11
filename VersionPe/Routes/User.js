@@ -3,6 +3,7 @@ import  {RegisterUser,Login,UpdateUser,resetPass,verify, deleteUser, GetUser} fr
 import  verifyToken from "../middleware/auth.js";
 
 
+
 const router = express.Router();
 
 
@@ -88,7 +89,7 @@ router.post('/compte',RegisterUser)
  *       500:
  *         description: Some server error
  */
-router.post('/Login',Login,verifyToken)
+router.post('/Signin',Login,verifyToken)
 /**
  * @swagger
  * /user/updateUser/{id}:
