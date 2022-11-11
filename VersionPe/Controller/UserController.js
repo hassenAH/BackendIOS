@@ -21,6 +21,11 @@ export async function RegisterUser(req , res){
     if (!(email && password && first_name && last_name)) {
       res.status(400).send("All input is required");
     }
+    const {error} =  userValidate(req.body);
+
+    if(error){
+        return res.status(400).send(error.details[0].message);
+    }
 
     // check if user already exist
     // Validate if user exist in our database
@@ -133,6 +138,7 @@ export async function UpdateUser(req,res){
       user.last_name=last_name;
       user.email=email;
       user.password=encryptedPassword;
+      user.image=`${req.protocol}://${req.get('host')}/img/${req.file.filename}`;
       user.save();
       res.status(200).json("Update ")
     }else
