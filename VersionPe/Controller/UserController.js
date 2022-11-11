@@ -7,7 +7,7 @@ import Token from "../Model/Token.js";
 import crypto from "crypto"
 import verifyToken from "../middleware/auth.js";
 
-
+import verifymail from "../Controller/template/templates.js"
 
 
 
@@ -21,11 +21,7 @@ export async function RegisterUser(req , res){
     if (!(email && password && first_name && last_name)) {
       res.status(400).send("All input is required");
     }
-    const {error} =  userValidate(req.body);
-
-    if(error){
-        return res.status(400).send(error.details[0].message);
-    }
+    
 
     // check if user already exist
     // Validate if user exist in our database
@@ -60,7 +56,9 @@ export async function RegisterUser(req , res){
   
 
     const message = `${process.env.URL}user/verify/${user.id}`;
-      await sendEmail(user.email, "Verify Email", message);
+    const v = await verifymail(user.first_name,message);
+      await sendEmail(user.email, "Verify Email", v);
+      
      
     
         res.send(user);

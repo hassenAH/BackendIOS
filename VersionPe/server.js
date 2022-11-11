@@ -63,10 +63,10 @@ app.use(passport.initialize()) // init passport on every route call
 app.use(passport.session())    //allow passport to use "express-session"
 const GOOGLE_CLIENT_ID = "825384301124-ildkjgm6nklsd5h1e71j33ac9apatd8i.apps.googleusercontent.com"
 const GOOGLE_CLIENT_SECRET = "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"
-authUser = (request, accessToken, refreshToken, profile, done) => {
+var authUser = (request, accessToken, refreshToken, profile, done) => {
   return done(null, profile);
 }
-passport.use(new GoogleStrategy({
+passport.use(new g({
   clientID:     GOOGLE_CLIENT_ID,
   clientSecret: GOOGLE_CLIENT_SECRET,
   callbackURL: "http://localhost:5000/auth/google/callback",
@@ -99,28 +99,7 @@ passport.deserializeUser((user, done) => {
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}/`);
 });
-let count = 1
-showlogs = (req, res, next) => {
-    console.log("\n==============================")
-    console.log(`------------>  ${count++}`)
 
-    console.log(`\n req.session.passport -------> `)
-    console.log(req.session.passport)
-  
-    console.log(`\n req.user -------> `) 
-    console.log(req.user) 
-  
-    console.log("\n Session and Cookie")
-    console.log(`req.session.id -------> ${req.session.id}`) 
-    console.log(`req.session.cookie -------> `) 
-    console.log(req.session.cookie) 
-  
-    console.log("===========================================\n")
-
-    next()
-}
-
-app.use(showlogs)
 
 
 app.get('/auth/google',
@@ -141,7 +120,7 @@ app.get("/login", (req, res) => {
 
 
 //Use the req.isAuthenticated() function to check if user is Authenticated
-checkAuthenticated = (req, res, next) => {
+const checkAuthenticated = (req, res, next) => {
   if (req.isAuthenticated()) { return next() }
   res.redirect("/login")
 }

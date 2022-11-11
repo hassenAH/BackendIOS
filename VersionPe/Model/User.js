@@ -45,16 +45,8 @@ const UserSchema = mongoose.Schema({
       timestamps: true,
     }
   );
-  export function userValidate(user){
-    const schema = Joi.object({
-       first_name: Joi.string().min(3).max(10).required(),
-       last_name: Joi.string().min(3).max(10).required(),
-        email: Joi.string().email().required(),
-        password: Joi.string().min(5).required()
-    });
 
-    return schema.validate(user);
-}
+
 
 
 export default model("user" ,  UserSchema  )
