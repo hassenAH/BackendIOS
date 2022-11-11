@@ -138,7 +138,7 @@ export async function UpdateUser(req,res){
       user.last_name=last_name;
       user.email=email;
       user.password=encryptedPassword;
-      user.image=`${req.protocol}://${req.get('host')}/img/${req.file.filename}`;
+      user.image=`${req.file.filename}`;
       user.save();
       res.status(200).json("Update ")
     }else
