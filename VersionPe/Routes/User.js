@@ -1,5 +1,5 @@
 import express from'express' ;
-import  {RegisterUser,Login,UpdateUser,resetPass,verify, deleteUser, GetUser} from"../Controller/UserController.js" ;
+import  {RegisterUser,Login,UpdateUser,resetPass,verify, deleteUser, GetUser,forgetPass} from"../Controller/UserController.js" ;
 import  verifyToken from "../middleware/auth.js";
 
 
@@ -69,7 +69,7 @@ const router = express.Router();
 router.post('/compte',RegisterUser)
 /**
  * @swagger
- * /user/Login:
+ * /user/Signin:
  *   post:
  *     summary: Login
  *     tags: [User]
@@ -90,6 +90,52 @@ router.post('/compte',RegisterUser)
  *         description: Some server error
  */
 router.post('/Signin',Login,verifyToken)
+/**
+ * @swagger
+ * /user/resetpwd:
+ *   post:
+ *     summary: send Code reset password
+ *     tags: [User]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/User'
+ *     responses:
+ *       200:
+ *         description: The code  was successfully sent
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       500:
+ *         description: Some server error
+ */
+ router.post('/resetpwd',resetPass)
+ /**
+ * @swagger
+ * /user/resetpassword:
+ *   post:
+ *     summary:  reset password
+ *     tags: [User]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/User'
+ *     responses:
+ *       200:
+ *         description: The password update successfully sent
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       500:
+ *         description: Some server error
+ */
+  router.post('/resetpassword',forgetPass)
 /**
  * @swagger
  * /user/updateUser/{id}:
@@ -148,39 +194,7 @@ router.put('/updateUser/:id',UpdateUser);
  */
 
 router.get('/verify/:id',verify);
-/**
- * @swagger
- * /user/resetpwd/{id}:
- *   put:
- *     summary: updates password by id
- *     tags: [User]
- *     parameters:
- *       - in: path
- *         name: id
- *         schema:
- *           type: string
- *         required: true
- *         description: post id
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/user'
- *     responses:
- *       200:
- *         decsription: The post was updated
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Post'
- *       404:
- *         description: post was not found.
- *       500:
- *         description: Some errors happend.
- *
- */
-router.put('/resetpwd',resetPass)
+
 /**
  * @swagger
  *  /user/delete/{id}:

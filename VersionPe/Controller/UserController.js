@@ -8,6 +8,7 @@ import crypto from "crypto"
 import verifyToken from "../middleware/auth.js";
 
 import verifymail from "../Controller/template/templates.js"
+import resetpassword from "../Controller/template/codetemplate.js"
 
 
 
@@ -56,7 +57,8 @@ export async function RegisterUser(req , res){
   
 
     const message = `${process.env.URL}user/verify/${user.id}`;
-    const v = await verifymail(user.first_name,message);
+    const name = user.first_name+" "+user.last_name;
+    const v = await verifymail(name,message);
       await sendEmail(user.email, "Verify Email", v);
       
      
@@ -138,7 +140,7 @@ export async function UpdateUser(req,res){
       user.password=encryptedPassword;
       user.image=`${req.file.filename}`;
       user.save();
-      res.status(200).json("Update ")
+      res.status(200).json("Update ",user)
     }else
     res.status(404).json("Not found ")
     
@@ -152,17 +154,26 @@ export async function resetPass(req,res){
   var user = await User.findOne({
     email:req.body.email});
 
-    if(!user){
-      res.json({
+    if(!user)
+      res.send({
         msg:'user not found'
       })
-    }else{
+    
       var a = otpGenerator.generate(6, { upperCaseAlphabets: false, specialChars: false });
       user.code=a;
       user.save();
-      const message = `votre code est `+user.code;
-      await sendEmail(user.email, "Code Rest Password", message);
-    }
+      var message =user.code;
+      const name = user.first_name+" "+user.last_name;
+    const v = await resetpassword(name,message);
+       sendEmail(user.email, "Verify Email", v);
+      
+      res.send({
+        msg:'email sent'
+      })
+      
+    
+    
+    
 
 }
 export async function forgetPass(req,res){
@@ -170,9 +181,10 @@ export async function forgetPass(req,res){
     const user = await User.findOne({ code:req.body.code });
     if(user)
     {
-      password=req.body.password;
+      var password=req.body.password;
       const  encryptedPassword = await bcrypt.hash(password, 10);
       user.password=encryptedPassword;
+      user.code="";
       user.save();
       res.send("password change sucessfully");
       
@@ -183,7 +195,7 @@ export async function forgetPass(req,res){
 
     
   } catch (error) {
-    console.log("prob");
+    console.log(error);
   }
 }
 
