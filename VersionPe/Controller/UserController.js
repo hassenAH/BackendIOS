@@ -63,7 +63,7 @@ export async function RegisterUser(req , res){
       
      
     
-        res.send(user);
+      res.status(200).json({message : "ajout avec succeés",user});
       
     // return new user
     
@@ -103,7 +103,7 @@ export async function Login(req,res){
     res.status(400).send("All input is required");
   }
     // Validate if user exist in our database
-    const user = await User.findOne({ email: email });
+    const user = await User.findOne({ email: email.toLowerCase() });
   
    if(user.verified)
    {
@@ -116,12 +116,16 @@ export async function Login(req,res){
       }).save();
         
 
-      
+      user.token=token;
      
      
      
       res.status(200).json({message : "login avec succeés",user});
     }
+    
+   }else
+   {
+    res.status(400).json({message : "not found"});
    }
     
   } catch (err) {
