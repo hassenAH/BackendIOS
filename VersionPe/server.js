@@ -9,7 +9,9 @@ import swaggerUi from 'swagger-ui-express'
 import session from 'express-session'
 import passport from 'passport';
 import Google from 'passport-google-oauth2'
+import Facebook from 'passport-facebook'
 const g =Google.Strategy;
+const facebook = Facebook.Strategy;
 
 const options ={
   definition: {
@@ -62,37 +64,52 @@ app.use(session({
 app.use(passport.initialize()) // init passport on every route call
 app.use(passport.session())    //allow passport to use "express-session"
 const GOOGLE_CLIENT_ID = "825384301124-ildkjgm6nklsd5h1e71j33ac9apatd8i.apps.googleusercontent.com"
-const GOOGLE_CLIENT_SECRET = "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"
-var authUser = (request, accessToken, refreshToken, profile, done) => {
+const GOOGLE_CLIENT_SECRET = "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"
+var authUser = (request,accessToken,refreshToken,profile, done) => {
+  return done(null, profile);
+}
+
+var facebookuser = (request,accessToken,refreshToken,profile, done) => {
   return done(null, profile);
 }
 passport.use(new g({
   clientID:     GOOGLE_CLIENT_ID,
   clientSecret: GOOGLE_CLIENT_SECRET,
-  callbackURL: "http://localhost:5000/auth/google/callback",
+  callbackURL: "http://localhost:5000/auth/google",
   passReqToCallback   : true
 }, authUser));
+passport.use(new facebook({
+  clientID:     5511333658903319,
+  clientSecret: c090e02b8ff5287c32a37f826e968159,
+  callbackURL: "http://localhost:5000/facebook/callback",
+  profileFields:['id','displayname','name','gender','picture.type']
+}, facebookuser));
+app.get("/facebook", (req, res) => {
+  res.render("facebook")
+})
+app.get('/facebook/callback',
+    passport.authenticate( 'facebook', {
+        successRedirect: '/dashboard',
+        failureRedirect: '/login'
+}));
+app.get('/auth/facebook',
+  passport.authenticate('facebook', { scope:
+      [ 'email' ] }
+));
 
-
-passport.serializeUser( (user, done) => { 
-  console.log(`\n--------> Serialize User:`)
+passport.serializeUser(function (user, done){ 
   console.log(user)
-   // The USER object is the "authenticated user" from the done() in authUser function.
-   // serializeUser() will attach this user to "req.session.passport.user.{user}", so that it is tied to the session object for each session.  
-
-  done(null, user)
+  
+  return done(null, user.id)
 } )
 
-passport.deserializeUser((user, done) => {
-  console.log("\n--------- Deserialized User:")
-  console.log(user)
-  // This is the {user} that was saved in req.session.passport.user.{user} in the serializationUser()
-  // deserializeUser will attach this {user} to the "req.user.{user}", so that it can be used anywhere in the App.
-
-  done (null, user)
+passport.deserializeUser(function (user, done) {
+ 
+ return done (null, user,id)
 }) 
 
 
+app.set("View engine","ejs")
 
 
 /* Demarrer le serveur a l'ecoute des connexions */
@@ -107,7 +124,7 @@ app.get('/auth/google',
       [ 'email', 'profile' ] }
 ));
 
-app.get('/auth/google/callback',
+app.get('/google/callback',
     passport.authenticate( 'google', {
         successRedirect: '/dashboard',
         failureRedirect: '/login'
@@ -120,19 +137,6 @@ app.get("/login", (req, res) => {
 
 
 //Use the req.isAuthenticated() function to check if user is Authenticated
-const checkAuthenticated = (req, res, next) => {
-  if (req.isAuthenticated()) { return next() }
-  res.redirect("/login")
-}
+
 
 //Define the Protected Route, by using the "checkAuthenticated" function defined above as middleware
-app.get("/dashboard", checkAuthenticated, (req, res) => {
-  res.render("dashboard.ejs", {name: req.user.displayName})
-})
-
-//Define the Logout
-app.post("/logout", (req,res) => {
-    req.logOut()
-    res.redirect("/login")
-    console.log(`-------> User Logged out`)
-})
