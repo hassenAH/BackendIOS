@@ -79,8 +79,8 @@ passport.use(new g({
   passReqToCallback   : true
 }, authUser));
 passport.use(new facebook({
-  clientID:     5511333658903319,
-  clientSecret: c090e02b8ff5287c32a37f826e968159,
+  clientID:     "5511333658903319",
+  clientSecret: "c090e02b8ff5287c32a37f826e968159",
   callbackURL: "http://localhost:5000/facebook/callback",
   profileFields:['id','displayname','name','gender','picture.type']
 }, facebookuser));
