@@ -82,7 +82,11 @@ passport.use(new facebook({
   clientID:     "5511333658903319",
   clientSecret: "c090e02b8ff5287c32a37f826e968159",
   callbackURL: "http://localhost:5000/facebook/callback",
-  profileFields:['id','displayname','name','gender','picture.type']
+  profileFields:[
+  "displayName",
+  "email",
+  "gender",
+  "picture.type(large)"]
 }, facebookuser));
 app.get("/facebook", (req, res) => {
   res.render("facebook")
@@ -105,7 +109,7 @@ passport.serializeUser(function (user, done){
 
 passport.deserializeUser(function (user, done) {
  
- return done (null, user,id)
+ return done (null, user)
 }) 
 
 
@@ -136,7 +140,3 @@ app.get("/login", (req, res) => {
 })
 
 
-//Use the req.isAuthenticated() function to check if user is Authenticated
-
-
-//Define the Protected Route, by using the "checkAuthenticated" function defined above as middleware
