@@ -1,6 +1,8 @@
 import express from'express' ;
-import  {RegisterUser,Login,UpdateUser,resetPass,verify, deleteUser, GetUser,forgetPass} from"../Controller/UserController.js" ;
+import multer from '../middleware/multer-config.js';
+import  {RegisterUser,Login,UpdateUser,resetPass,verify, deleteUser, GetUser,forgetPass,changepass} from"../Controller/UserController.js" ;
 import  verifyToken from "../middleware/auth.js";
+import multerConfig from '../middleware/multer-config.js';
 
 
 
@@ -115,9 +117,32 @@ router.post('/Signin',Login,verifyToken)
  router.post('/resetpwd',resetPass)
  /**
  * @swagger
+ * /user/changepwd:
+ *   post:
+ *     summary:  change password
+ *     tags: [User]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/User'
+ *     responses:
+ *       200:
+ *         description: The code  was successfully sent
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       500:
+ *         description: Some server error
+ */
+  router.post('/changepwd',changepass)
+ /**
+ * @swagger
  * /user/resetpassword:
  *   post:
- *     summary:  reset password
+ *     summary:   validate code for reset
  *     tags: [User]
  *     requestBody:
  *       required: true
@@ -139,7 +164,7 @@ router.post('/Signin',Login,verifyToken)
 /**
  * @swagger
  * /user/updateUser/{id}:
- *   put:
+ *   post:
  *     summary: updates posts by id
  *     tags: [User]
  *     parameters:
@@ -168,7 +193,7 @@ router.post('/Signin',Login,verifyToken)
  *         description: Some errors happend.
  *
  */
-router.put('/updateUser/:id',UpdateUser);
+router.post('/updateUser/:id',multer,UpdateUser);
 /**
  * @swagger
  * /user/verify/{id}:

@@ -134,19 +134,21 @@ export async function Login(req,res){
   // Our register logic ends here
 }
 export async function UpdateUser(req,res){
+
   const  { first_name , last_name, email , password } = req.body;
   const  encryptedPassword = await bcrypt.hash(password, 10);
-    var user = await User.findOne({_id:req.params.id})
-    if(user)
-    {user.first_name=first_name;
-      user.last_name=last_name;
-      user.email=email;
-      user.password=encryptedPassword;
-      user.image=`${req.file.filename}`;
-      user.save();
-      res.status(200).json("Update ",user)
-    }else
-    res.status(404).json("Not found ")
+  const user = await User.findOne({ _id: req.params.id });
+  user.last_name= last_name;
+  user.first_name= first_name;
+  user.email=email
+  user.password=encryptedPassword
+  user.image=`${req.file.filename}`
+  user.save()
+    
+  
+  res.status(200).json({message : "update avec succeés",user});
+   
+   // res.status(404).json("Not found ")
     
     
 }
@@ -156,7 +158,7 @@ export async function UpdateUser(req,res){
 export async function resetPass(req,res){
   
   var user = await User.findOne({
-    email:req.body.email});
+    email:req.body.email.toLowerCase()});
 
     if(!user)
       res.send({
@@ -169,7 +171,7 @@ export async function resetPass(req,res){
       var message =user.code;
       const name = user.first_name+" "+user.last_name;
     const v = await resetpassword(name,message);
-       sendEmail(user.email, "Verify Email", v);
+       sendEmail(user.email, "Reset Password Email", v);
       
       res.send({
         msg:'email sent'
@@ -185,13 +187,34 @@ export async function forgetPass(req,res){
     const user = await User.findOne({ code:req.body.code });
     if(user)
     {
+      
+      res.status(200).json("code valide ")
+    }
+    else
+    [
+      res.status(400).json("invalide code ")
+    ]
+    
+   
+   
+
+    
+  } catch (error) {
+    console.log(error);
+  }
+}
+export async function changepass(req,res){
+  try {
+    const user = await User.findOne({ email:req.body.email.toLowerCase() });
+    if(user)
+    {
+      
       var password=req.body.password;
       const  encryptedPassword = await bcrypt.hash(password, 10);
       user.password=encryptedPassword;
       user.code="";
       user.save();
       res.send("password change sucessfully");
-      
     }
     
    
@@ -202,6 +225,7 @@ export async function forgetPass(req,res){
     console.log(error);
   }
 }
+
 
 
 
