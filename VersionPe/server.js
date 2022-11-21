@@ -1,6 +1,7 @@
 import express from "express"
 import UserRoute from"./Routes/User.js"
 import mongoose from"mongoose";
+import CategorieRoute from"./Routes/Categorie.js"
 
 
 import dotenv from"dotenv" ;
@@ -55,6 +56,7 @@ const port = process.env.PORT || 9090; // Le port du serveur
 app.use(express.json());
 
 app.use("/user", UserRoute);
+app.use("/categorie",CategorieRoute);
 app.use('/api-docs',swaggerUi.serve,swaggerUi.setup(swaggerSpec))
 app.use(session({
   secret: "secret",

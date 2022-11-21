@@ -1,6 +1,6 @@
 import express from'express' ;
 import multer from '../middleware/multer-config.js';
-import  {RegisterUser,Login,UpdateUser,resetPass,verify, deleteUser, GetUser,forgetPass,changepass} from"../Controller/UserController.js" ;
+import  {RegisterUser,Login,UpdateUser,resetPass,verify, deleteUser, GetUser,forgetPass,changepass,UpdateAvocat,GetallAvocat,GetAvocatByCategorie} from"../Controller/UserController.js" ;
 import  verifyToken from "../middleware/auth.js";
 import multerConfig from '../middleware/multer-config.js';
 
@@ -32,12 +32,15 @@ const router = express.Router();
  *         password:
  *            type: string
  *            descripton: password of a user
+ *         categorie:
+ *            type: string
  *          
  *       example:
  *         first_name: ahmadi
  *         last_name: hassen
  *         email: hassenahmadi@ymail.com
  *         password: aaa
+ *         categorie: droit civil
  *
  */
 /**
@@ -196,6 +199,39 @@ router.post('/Signin',Login,verifyToken)
 router.post('/updateUser/:id',multer,UpdateUser);
 /**
  * @swagger
+ * /user/UpdateAvocat/{id}:
+ *   post:
+ *     summary: updates avocat by id
+ *     tags: [User]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: user id
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/User'
+ *     responses:
+ *       200:
+ *         decsription: The user was updated
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       404:
+ *         description: user was not found.
+ *       500:
+ *         description: Some errors happend.
+ *
+ */
+ router.post('/UpdateAvocat/:id',UpdateAvocat);
+/**
+ * @swagger
  * /user/verify/{id}:
  *   get:
  *     summary: verify a user  by id
@@ -266,5 +302,48 @@ router.delete('/delete/:id',deleteUser)
  *
  */
 router.get('/profil/:id',GetUser)
+/**
+ * @swagger
+ *  /user/allAvocat:
+ *    get:
+ *      summary: Get all avocat
+ *      tags: [User]
+ *      
+ *      responses:
+ *        200:
+ *          description: Users Avocat
+ *          content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *        404:
+ *          description: The user was not found
+ *
+ */
+ router.get('/allAvocat',GetallAvocat)
+ /**
+ * @swagger
+ *  /user/getbycategorie:
+ *    post:
+ *      summary: Get avocat by categorie
+ *      tags: [User]
+ *      requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/User'
+ *      responses:
+ *        200:
+ *          description: User by its id
+ *          content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *        404:
+ *          description: The user was not found
+ *
+ */
+router.post('/getbycategorie',GetAvocatByCategorie)
 
 export default router;

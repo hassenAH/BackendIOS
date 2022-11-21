@@ -35,6 +35,21 @@ const UserSchema = mongoose.Schema({
       {
         type: String
       },
+      role :
+      {
+        type: String,
+        default:"User",
+      },
+      specialite :
+      {
+        type: String,
+        default:"",
+      },
+      experience :
+      {
+        type: Number ,
+        default:0,
+      },
       verified: {
         type: Boolean,
         default: false,

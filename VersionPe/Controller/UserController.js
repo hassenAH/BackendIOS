@@ -60,9 +60,6 @@ export async function RegisterUser(req , res){
     const name = user.first_name+" "+user.last_name;
     const v = await verifymail(name,message);
       await sendEmail(user.email, "Verify Email", v);
-      
-     
-    
       res.status(200).json({message : "ajout avec succeés",user});
       
     // return new user
@@ -152,6 +149,22 @@ export async function UpdateUser(req,res){
     
     
 }
+export async function UpdateAvocat(req,res){
+
+  const  categorie = req.body.categorie;
+  const user = await User.findOne({ _id: req.params.id });
+  user.specialite = categorie
+  user.role="Avocat"
+  user.save()
+    
+  
+  res.status(200).json({message : "update avec succeés",user});
+   
+   // res.status(404).json("Not found ")
+    
+    
+}
+
 
 
 
@@ -265,7 +278,48 @@ export async function GetUser(req,res){
       console.log("prob");
     }
 
-}
+
+  }
+  export async function GetallAvocat(req,res){
+  
+  
+    try {
+
+      
+
+      var user = await User.find({role:"Avocat"})
+      if(user)
+      {
+        res.send(user)
+        res.status(200).json(user)
+      }else
+      res.status(404).json("user not found")
+    } catch (error) {
+      console.log(error);
+    }
+
+
+  }
+  export async function GetAvocatByCategorie(req,res){
+  
+  
+    try {
+
+      
+
+      var user = await User.find({specialite: req.body.categorie})
+      if(user)
+      {
+        res.send(user)
+        res.status(200).json(user)
+      }else
+      res.status(404).json("user not found")
+    } catch (error) {
+      console.log(error);
+    }
+
+
+  }
 
 
 
