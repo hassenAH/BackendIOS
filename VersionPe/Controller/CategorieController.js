@@ -60,7 +60,7 @@ export async function deleteCategorie(req,res){
         if(!categorie)
         res.status(404).json("categorie not found")
 
-        user.remove();
+        categorie.remove();
         res.status(200).json("categorie Supprime")
       } catch (error) {
         console.log("prob");
@@ -84,6 +84,24 @@ export async function GetCategorie(req,res){
     } catch (error) {
       console.log("prob");
     }
+
+}
+export async function GetALLCategorie(req,res){
+  
+  
+  try {
+
+
+    var categorie = await Categorie.find({})
+    if(categorie)
+    {
+      res.send(categorie)
+      res.status(200).json(categorie)
+    }else
+    res.status(404).json("user not found")
+  } catch (error) {
+    console.log("prob");
+  }
 
 }
 

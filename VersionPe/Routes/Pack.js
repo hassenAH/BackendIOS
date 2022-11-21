@@ -1,6 +1,6 @@
 import express from'express' ;
 import multer from '../middleware/multer-config.js';
-import  {GetCategorie,deleteCategorie,UpdateCategorie,addCategorie, GetALLCategorie} from"../Controller/CategorieController.js" ;
+import  {Getpack,GetALLpack,addPack,UpdatePack,deletepack} from"../Controller/PackController.js" ;
 
 
 
@@ -14,7 +14,7 @@ const router = express.Router();
  * @swagger
  * components:
  *   schemas:
- *     categorie:
+ *     Pack:
  *       type: object
  *       properties:
  *         id:
@@ -22,86 +22,94 @@ const router = express.Router();
  *           description: The Auto-generated id of a categorie
  *         name:
  *           type: string
- *           description: first name of a categorie
+ *           description: first name of a Pack
+ *         description:
+ *           type: string
+ *           description: description of a Pack
+ *         prix:
+ *           type: number
+ *           description: prix of a Pack
  *         
  *          
  *       example:
- *         name: droit civil
+ *         name: pack gold
+ *         description: analyse de dossier et frais de demande avec suivie de dossier
+ *         prix: 150
  *         
  *
  */
 /**
  * @swagger
  *  tags:
- *    name: categorie
- *    description: Categories
+ *    name: Pack
+ *    description: Pack
  */
 /**
  * @swagger
- * /categorie/add:
+ * /Pack/add:
  *   post:
  *     summary: Create a new User
- *     tags: [categorie]
+ *     tags: [Pack]
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/categorie'
+ *             $ref: '#/components/schemas/Pack'
  *     responses:
  *       200:
- *         description: The categorie was successfully created
+ *         description: The Pack was successfully created
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/categorie'
+ *               $ref: '#/components/schemas/Pack'
  *       500:
  *         description: Some server error
  */
-router.post('/add',multer,addCategorie)
+router.post('/add',addPack)
 
 
 /**
  * @swagger
- * /categorie/update/{id}:
+ * /Pack/update/{id}:
  *   post:
- *     summary: updates posts by id
- *     tags: [categorie]
+ *     summary: updates Pack by id
+ *     tags: [Pack]
  *     parameters:
  *       - in: path
  *         name: id
  *         schema:
  *           type: string
  *         required: true
- *         description: categorie id
+ *         description: Pack id
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/categorie'
+ *             $ref: '#/components/schemas/Pack'
  *     responses:
  *       200:
- *         decsription: The categorie was updated
+ *         decsription: The Pack was updated
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/categorie'
+ *               $ref: '#/components/schemas/Pack'
  *       404:
- *         description: categorie was not found.
+ *         description: Pack was not found.
  *       500:
  *         description: Some errors happend.
  *
  */
-router.post('/update/:id',multer,UpdateCategorie);
+router.post('/update/:id',UpdatePack);
 
 
 /**
  * @swagger
- *  /categorie/delete/{id}:
+ *  /Pack/delete/{id}:
  *    delete:
- *      summary: removes a categorie
- *      tags: [categorie]
+ *      summary: removes a Pack
+ *      tags: [Pack]
  *      parameters:
  *        - in: path
  *          name: id
@@ -111,18 +119,18 @@ router.post('/update/:id',multer,UpdateCategorie);
  *            type: string
  *      responses:
  *        200:
- *          description: The categorie was deleted
+ *          description: The Pack was deleted
  *        404:
- *          description: The categorie was not found
+ *          description: The Pack was not found
  *
  */
-router.delete('/delete/:id',deleteCategorie)
+router.delete('/delete/:id',deletepack)
 /**
  * @swagger
- *  /categorie/{id}:
+ *  /Pack/{id}:
  *    get:
- *      summary: Get a categorie
- *      tags: [categorie]
+ *      summary: Get a Pack
+ *      tags: [Pack]
  *      parameters:
  *        - in: path
  *          name: id
@@ -132,34 +140,35 @@ router.delete('/delete/:id',deleteCategorie)
  *            type: string
  *      responses:
  *        200:
- *          description: categorie by its id
+ *          description: Pack by its id
  *          content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/categorie'
+ *               $ref: '#/components/schemas/Pack'
  *        404:
- *          description: The categorie was not found
+ *          description: The Pack was not found
  *
  */
-router.get('/:id',GetCategorie)
+router.get('/:id',Getpack)
 /**
  * @swagger
- *  /categorie:
+ *  /Pack:
  *    get:
- *      summary: Get all categorie
- *      tags: [categorie]
+ *      summary: Get a Pack
+ *      tags: [Pack]
  *     
  *      responses:
  *        200:
- *          description: categorie 
+ *          description: Pack 
  *          content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/categorie'
+ *               $ref: '#/components/schemas/Pack'
  *        404:
- *          description: The categorie was not found
+ *          description: The Pack was not found
  *
  */
- router.get('/',GetALLCategorie)
+ router.get('/',GetALLpack)
+
 
 export default router;

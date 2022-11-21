@@ -3,6 +3,7 @@ import UserRoute from"./Routes/User.js"
 import mongoose from"mongoose";
 import CategorieRoute from"./Routes/Categorie.js"
 
+import PackRoute from"./Routes/Pack.js"
 
 import dotenv from"dotenv" ;
 import swaggerJSDoc from 'swagger-jsdoc'
@@ -56,6 +57,7 @@ const port = process.env.PORT || 9090; // Le port du serveur
 app.use(express.json());
 
 app.use("/user", UserRoute);
+app.use("/Pack",PackRoute);
 app.use("/categorie",CategorieRoute);
 app.use('/api-docs',swaggerUi.serve,swaggerUi.setup(swaggerSpec))
 app.use(session({

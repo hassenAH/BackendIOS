@@ -151,8 +151,10 @@ export async function UpdateUser(req,res){
 }
 export async function UpdateAvocat(req,res){
 
-  const  categorie = req.body.categorie;
+  var  categorie = req.body.categorie;
+  var experience=req.body.experience;
   const user = await User.findOne({ _id: req.params.id });
+  user.experience= experience
   user.specialite = categorie
   user.role="Avocat"
   user.save()

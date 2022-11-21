@@ -34,6 +34,8 @@ const router = express.Router();
  *            descripton: password of a user
  *         categorie:
  *            type: string
+ *         experience:
+ *            type: number
  *          
  *       example:
  *         first_name: ahmadi
@@ -41,6 +43,7 @@ const router = express.Router();
  *         email: hassenahmadi@ymail.com
  *         password: aaa
  *         categorie: droit civil
+ *         experience : 5 
  *
  */
 /**
