@@ -1,8 +1,10 @@
 
 import Categorie from "../Model/Categorie.js"
 
-
-
+import axios from "axios";
+import FormData from "form-data";
+import fs from "fs";
+import path from "path"
 
 export async function addCategorie(req , res){
  
@@ -11,8 +13,7 @@ export async function addCategorie(req , res){
     var k  = req.body.name;
     var image = `${req.file.filename}`
     
-
-
+    
 
     // Create user in our database
     const categorie = await Categorie.create({
@@ -22,7 +23,30 @@ export async function addCategorie(req , res){
     
       res.status(200).json({message : "ajout avec succeés",categorie});
       
-
+      const inputPath =  `../VersionPe/public/images/${req.file.filename}`;
+      const formData = new FormData();
+      formData.append('size', 'auto');
+      formData.append('image_file', fs.createReadStream(inputPath), path.basename(inputPath));
+      
+      axios({
+        method: 'post',
+        url: 'https://api.remove.bg/v1.0/removebg',
+        data: formData,
+        responseType: 'arraybuffer',
+        headers: {
+          ...formData.getHeaders(),
+          'X-Api-Key': 'VqQpAMgtAzG2NhhLUqSbTACk',
+        },
+        encoding: null
+      })
+      .then((response) => {
+        if(response.status != 200) return console.error('Error:', response.status, response.statusText);
+        fs.writeFileSync(`${req.file.filename}`, response.data);
+      })
+      .catch((error) => {
+          return console.error('Request failed:', error);
+      });
+  
     
   } catch (err) {
     console.log(err);

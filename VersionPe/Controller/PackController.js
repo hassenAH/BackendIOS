@@ -101,7 +101,7 @@ export async function GetALLpack(req,res){
         res.send(pack)
         res.status(200).json(pack)
       }else
-      res.status(404).json("user not found")
+      res.status(404).json("pack not found")
     } catch (error) {
       console.log("prob");
     }

@@ -72,7 +72,7 @@ const router = express.Router();
  *             schema:
  *               $ref: '#/components/schemas/User'
  *       500:
- *         description: Some server error
+ *         description: Some server error*
  */
 router.post('/compte',RegisterUser)
 /**

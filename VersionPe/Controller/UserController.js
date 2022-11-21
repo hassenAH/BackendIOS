@@ -10,6 +10,12 @@ import verifyToken from "../middleware/auth.js";
 import verifymail from "../Controller/template/templates.js"
 import resetpassword from "../Controller/template/codetemplate.js"
 
+import fs from "fs";
+import path from "path"
+
+import axios from "axios";
+import FormData from "form-data";
+
 
 
 export async function RegisterUser(req , res){
@@ -135,6 +141,7 @@ export async function UpdateUser(req,res){
   const  { first_name , last_name, email , password } = req.body;
   const  encryptedPassword = await bcrypt.hash(password, 10);
   const user = await User.findOne({ _id: req.params.id });
+  
   user.last_name= last_name;
   user.first_name= first_name;
   user.email=email
@@ -146,6 +153,29 @@ export async function UpdateUser(req,res){
   res.status(200).json({message : "update avec succeés",user});
    
    // res.status(404).json("Not found ")
+   const inputPath =  `../VersionPe/public/images/${req.file.filename}`;
+      const formData = new FormData();
+      formData.append('size', 'auto');
+      formData.append('image_file', fs.createReadStream(inputPath), path.basename(inputPath));
+      
+      axios({
+        method: 'post',
+        url: 'https://api.remove.bg/v1.0/removebg',
+        data: formData,
+        responseType: 'arraybuffer',
+        headers: {
+          ...formData.getHeaders(),
+          'X-Api-Key': 'VqQpAMgtAzG2NhhLUqSbTACk',
+        },
+        encoding: null
+      })
+      .then((response) => {
+        if(response.status != 200) return console.error('Error:', response.status, response.statusText);
+        fs.writeFileSync(`${req.file.filename}`, response.data);
+      })
+      .catch((error) => {
+          return console.error('Request failed:', error);
+      });
     
     
 }
@@ -154,6 +184,8 @@ export async function UpdateAvocat(req,res){
   var  categorie = req.body.categorie;
   var experience=req.body.experience;
   const user = await User.findOne({ _id: req.params.id });
+  
+  
   user.experience= experience
   user.specialite = categorie
   user.role="Avocat"

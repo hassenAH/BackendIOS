@@ -3,7 +3,7 @@ import UserRoute from"./Routes/User.js"
 import mongoose from"mongoose";
 import CategorieRoute from"./Routes/Categorie.js"
 
-import PackRoute from"./Routes/Pack.js"
+import PackRoute from"./Routes/Categorie.js"
 
 import dotenv from"dotenv" ;
 import swaggerJSDoc from 'swagger-jsdoc'
