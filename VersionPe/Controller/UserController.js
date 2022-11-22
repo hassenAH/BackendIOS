@@ -366,7 +366,7 @@ export async function GetUser(req,res){
     const search = new SerpApi.GoogleSearch("4a1ba614f73cc9208a3ebe1e55cfa018802aa03588e1532dd1283ae690cf163e");
   
   const params = {
-    q: "law",
+    q: "law article",
     tbm: "nws",
     location: "Tunisia"
   };
