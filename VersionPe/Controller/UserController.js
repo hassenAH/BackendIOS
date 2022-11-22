@@ -213,7 +213,7 @@ export async function resetPass(req,res){
       })
     
       var a = otpGenerator.generate(6, { upperCaseAlphabets: false, specialChars: false });
-      user.code=a;
+      user.code = a;
       user.save();
       var message =user.code;
       const name = user.first_name+" "+user.last_name;
@@ -358,3 +358,26 @@ export async function GetUser(req,res){
 
 
 
+  import SerpApi from 'google-search-results-nodejs';
+  
+  export async function GetNews(req,res){
+  
+  
+    const search = new SerpApi.GoogleSearch("4a1ba614f73cc9208a3ebe1e55cfa018802aa03588e1532dd1283ae690cf163e");
+  
+  const params = {
+    q: "law",
+    tbm: "nws",
+    location: "Tunisia"
+  };
+  
+  const callback = function(data) {
+    console.log(data["news_results"]);
+  };
+  
+  // Show result as JSON
+  
+  res.status(200).json(search.json(params, callback))
+
+
+  }

@@ -1,6 +1,6 @@
 import express from'express' ;
 import multer from '../middleware/multer-config.js';
-import  {RegisterUser,Login,UpdateUser,resetPass,verify, deleteUser, GetUser,forgetPass,changepass,UpdateAvocat,GetallAvocat,GetAvocatByCategorie} from"../Controller/UserController.js" ;
+import  {RegisterUser,Login,UpdateUser,resetPass,verify, deleteUser, GetUser,forgetPass,changepass,UpdateAvocat,GetallAvocat,GetAvocatByCategorie,GetNews} from"../Controller/UserController.js" ;
 import  verifyToken from "../middleware/auth.js";
 import multerConfig from '../middleware/multer-config.js';
 
@@ -348,5 +348,24 @@ router.get('/profil/:id',GetUser)
  *
  */
 router.post('/getbycategorie',GetAvocatByCategorie)
+/**
+ * @swagger
+ *  /user/getNews:
+ *    get:
+ *      summary: Get all avocat
+ *      tags: [User]
+ *      
+ *      responses:
+ *        200:
+ *          description: news 
+ *          content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *        404:
+ *          description: The user was not found
+ *
+ */
+ router.get('/getNews',GetNews)
 
 export default router;
