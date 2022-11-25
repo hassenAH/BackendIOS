@@ -5,11 +5,7 @@
             "type": "docker",
             "request": "launch",
             "preLaunchTask": "docker-run: debug",
-            "platform": "node",
-            "node": {
-                "package": "${workspaceFolder}/VersionPe/package.json",
-                "localRoot": "${workspaceFolder}/VersionPe"
-            }
+            "platform": "node"
         }
     ]
 }
