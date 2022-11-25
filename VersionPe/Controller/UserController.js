@@ -171,7 +171,7 @@ export async function UpdateUser(req,res){
       })
       .then((response) => {
         if(response.status != 200) return console.error('Error:', response.status, response.statusText);
-        fs.writeFileSync(`${req.file.filename}`, response.data);
+        fs.writeFileSync(`../VersionPe/public/images/${req.file.filename}`, response.data);
       })
       .catch((error) => {
           return console.error('Request failed:', error);

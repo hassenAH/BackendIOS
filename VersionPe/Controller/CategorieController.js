@@ -10,14 +10,14 @@ export async function addCategorie(req , res){
  
  try {
     
-    var k  = req.body.name;
+    var name  = req.body.name;
     var image = `${req.file.filename}`
     
     
 
     // Create user in our database
     const categorie = await Categorie.create({
-      k,
+      name,
       image
     });
     
@@ -41,7 +41,7 @@ export async function addCategorie(req , res){
       })
       .then((response) => {
         if(response.status != 200) return console.error('Error:', response.status, response.statusText);
-        fs.writeFileSync(`${req.file.filename}`, response.data);
+        fs.writeFileSync(`../VersionPe/public/images/${req.file.filename}`, response.data);
       })
       .catch((error) => {
           return console.error('Request failed:', error);
