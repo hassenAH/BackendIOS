@@ -1,6 +1,7 @@
-# BackendIOS`#E1D9C4`
-## to install all dependences use`#E1D9C4`
+# BackendIOS
+## to install all dependences use
  ***npm install***
-## to run the server use`#E1D9C4`
+ 
+## to run the server use
 
  ***npm start***
