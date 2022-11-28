@@ -23,7 +23,7 @@ export async function addCategorie(req , res){
     
       res.status(200).json({message : "ajout avec succeés",categorie});
       
-      const inputPath =  `../VersionPe/public/images/${req.file.filename}`;
+      const inputPath =  `./public/images/${req.file.filename}`;
       const formData = new FormData();
       formData.append('size', 'auto');
       formData.append('image_file', fs.createReadStream(inputPath), path.basename(inputPath));
@@ -41,7 +41,12 @@ export async function addCategorie(req , res){
       })
       .then((response) => {
         if(response.status != 200) return console.error('Error:', response.status, response.statusText);
-        fs.writeFileSync(`../VersionPe/public/images/${req.file.filename}`, response.data);
+        fs.writeFileSync(`.
+        
+        
+        
+        
+        /public/images/${req.file.filename}`, response.data);
       })
       .catch((error) => {
           return console.error('Request failed:', error);
@@ -101,7 +106,7 @@ export async function GetCategorie(req,res){
       var categorie = await Categorie.findOne({_id:id})
       if(categorie)
       {
-        res.send(categorie)
+        
         res.status(200).json(categorie)
       }else
       res.status(404).json("user not found")
@@ -119,12 +124,12 @@ export async function GetALLCategorie(req,res){
     var categorie = await Categorie.find({})
     if(categorie)
     {
-      res.send(categorie)
+      
       res.status(200).json(categorie)
     }else
     res.status(404).json("user not found")
   } catch (error) {
-    console.log("prob");
+    console.log(error);
   }
 
 }

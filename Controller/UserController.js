@@ -153,7 +153,7 @@ export async function UpdateUser(req,res){
   res.status(200).json({message : "update avec succeés",user});
    
    // res.status(404).json("Not found ")
-   const inputPath =  `../VersionPe/public/images/${req.file.filename}`;
+   const inputPath =  `./public/images/${req.file.filename}`;
       const formData = new FormData();
       formData.append('size', 'auto');
       formData.append('image_file', fs.createReadStream(inputPath), path.basename(inputPath));
@@ -165,13 +165,13 @@ export async function UpdateUser(req,res){
         responseType: 'arraybuffer',
         headers: {
           ...formData.getHeaders(),
-          'X-Api-Key': 'VqQpAMgtAzG2NhhLUqSbTACk',
+          'X-Api-Key': 'TgQuX1rdS5DmN66vcW6MCiLw',
         },
         encoding: null
       })
       .then((response) => {
         if(response.status != 200) return console.error('Error:', response.status, response.statusText);
-        fs.writeFileSync(`../VersionPe/public/images/${req.file.filename}`, response.data);
+        fs.writeFileSync(`./public/images/${req.file.filename}`, response.data);
       })
       .catch((error) => {
           return console.error('Request failed:', error);
@@ -321,13 +321,15 @@ export async function GetUser(req,res){
 
       
 
-      var user = await User.find({role:"Avocat"})
-      if(user)
+      var  avocat = await User.find({role: "Avocat"})
+      if(avocat)
       {
-        res.send(user)
-        res.status(200).json(user)
+       
+       
+        res.status(200).json(avocat);
+        
       }else
-      res.status(404).json("user not found")
+      res.status(404).json("no avocat")
     } catch (error) {
       console.log(error);
     }
@@ -361,24 +363,34 @@ export async function GetUser(req,res){
   import SerpApi from 'google-search-results-nodejs';
   
   export async function GetNews(req,res){
-  
-  
+  try
+  {
     const search = new SerpApi.GoogleSearch("4a1ba614f73cc9208a3ebe1e55cfa018802aa03588e1532dd1283ae690cf163e");
   
-  const params = {
-    q: "law article",
-    tbm: "nws",
-    location: "Tunisia"
-  };
-  
-  const callback = function(data) {
-    console.log(data["news_results"]);
-  };
-  
-  // Show result as JSON
-  
-  res.status(200).json(search.json(params, callback))
+    const params = {
+      q: "law article",
+      tbm: "nws",
+      location: "Tunisia"
+    };
+    
+    const callback = function(data) {
+      console.log(data["news_results"]);
+      res.status(200).json(data["news_results"])
+    };
+    
+    // Show result as JSON
+    search.json(params, callback)
+    
 
+    
+
+  }
+  catch(err)
+  {
+    
+  }
+  
+   
 
   }
   export async function GetNew(req,res){

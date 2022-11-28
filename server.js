@@ -40,6 +40,7 @@ dotenv.config({path:'./config/config.env'});
 
 const app = express();
 app.use(express.urlencoded({extended: true, limit: '50mb'}));
+app.use('/img',express.static('public/images'))
 
 const databaseName = "bizos"; // L'@ du serveur
 const port = process.env.PORT || 9090; // Le port du serveur
