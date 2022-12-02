@@ -37,6 +37,12 @@
     "swagger-jsdoc": "^6.0.0",
     "swagger-ui-express": "^4.6.0"
   },
-  "keywords": [],
+  "keywords": [
+    "example",
+   "heroku"
+  ],
+  "engines": {
+    "node": "16.x"
+  },
   "description": ""
 }

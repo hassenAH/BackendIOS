@@ -183,7 +183,7 @@ export async function UpdateAvocat(req,res){
 
   var  categorie = req.body.categorie;
   var experience=req.body.experience;
-  const user = await User.findOne({ _id: req.params.id });
+  var user = await User.findOne({ _id: req.params.id });
   
   
   user.experience= experience
@@ -193,12 +193,55 @@ export async function UpdateAvocat(req,res){
     
   
   res.status(200).json({message : "update avec succeés",user});
+  
    
    // res.status(404).json("Not found ")
     
     
 }
 
+
+export async function UpdateSignature(req,res){
+
+ 
+
+  var user = await User.findOne({ _id: req.params.id });
+  
+  
+  user.signature= `${req.file.filename}`
+
+  user.save()
+    
+  
+  res.status(200).json({message : "update avec succeés",user});
+  const inputPath =  `./public/images/${req.file.filename}`;
+  const formData = new FormData();
+  formData.append('size', 'auto');
+  formData.append('image_file', fs.createReadStream(inputPath), path.basename(inputPath));
+  
+  axios({
+    method: 'post',
+    url: 'https://api.remove.bg/v1.0/removebg',
+    data: formData,
+    responseType: 'arraybuffer',
+    headers: {
+      ...formData.getHeaders(),
+      'X-Api-Key': 'TgQuX1rdS5DmN66vcW6MCiLw',
+    },
+    encoding: null
+  })
+  .then((response) => {
+    if(response.status != 200) return console.error('Error:', response.status, response.statusText);
+    fs.writeFileSync(`./public/signature/${req.file.filename}`, response.data);
+  })
+  .catch((error) => {
+      return console.error('Request failed:', error);
+  });
+   
+   // res.status(404).json("Not found ")
+    
+    
+}
 
 
 
@@ -368,7 +411,7 @@ export async function GetUser(req,res){
     const search = new SerpApi.GoogleSearch("4a1ba614f73cc9208a3ebe1e55cfa018802aa03588e1532dd1283ae690cf163e");
   
     const params = {
-      q: "law article",
+      q: "article+juridique+tunisie",
       tbm: "nws",
       location: "Tunisia"
     };
@@ -408,11 +451,12 @@ export async function GetUser(req,res){
   
   const callback = function(data) {
     console.log(data["news_results"]);
+    res.status(200).json(data["news_results"])
   };
   
   // Show result as JSON
-  
-  res.status(200).json(search.json(params, callback))
+  search.json(params, callback)
+
 
 
   }

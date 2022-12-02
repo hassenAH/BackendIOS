@@ -1,6 +1,6 @@
 import express from'express' ;
 import multer from '../middleware/multer-config.js';
-import  {GetCase,GetALLCase,addCase,UpdateCase,deleteCase} from"../Controller/CaseController.js" ;
+import  {GetCase,GetALLCase,addCase,UpdateCase,deleteCase,GetCasebyUser} from"../Controller/CaseController.js" ;
 
 
 
@@ -26,15 +26,29 @@ const router = express.Router();
  *         description:
  *           type: string
  *           description: description of a Case
+ *         LastnameUser:
+ *           type: string
+ *           description: last name  of a user
+ *         nameUser:
+ *           type: string
+ *           description: name of a user
  *         traite:
  *           type: bool
  *           description: etat of a Case
+ *         Prix:
+ *           type: Number
+ *           description: etat of a Case
+ *           
  *         
  *          
  *       example:
  *         title: divorce
  *         description:  La séparation de corps permet aux époux de rester mariés, mais de ne plus vivre ensemble.
  *         traite: false
+ *         nameUser : hassen
+ *         LastnameUser: ahmadi
+ *         Prix : 2000
+ * 
  *         
  *
  */
@@ -169,6 +183,40 @@ router.get('/:id',GetCase)
  *
  */
  router.get('/',GetALLCase)
+
+ /**
+ * @swagger
+ * /Case/update/{id}:
+ *   post:
+ *     summary: updates Case by id
+ *     tags: [Case]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Case id
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Case'
+ *     responses:
+ *       200:
+ *         decsription: The Case was updated
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Case'
+ *       404:
+ *         description: Case was not found.
+ *       500:
+ *         description: Some errors happend.
+ *
+ */
+router.post('/update/:id',UpdateCase);
 
 
 export default router;

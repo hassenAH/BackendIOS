@@ -31,6 +31,10 @@ const UserSchema = mongoose.Schema({
       {
         type: String
       },
+      signature :
+      {
+        type: String
+      },
       code :
       {
         type: String

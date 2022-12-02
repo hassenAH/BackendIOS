@@ -23,7 +23,18 @@ const CaseSchema = mongoose.Schema({
         type: String,
     
       },
-      
+      nameUser: {
+        type: String,
+    
+      },
+      LastnameUser: {
+        type: String,
+    
+      },
+      Prix: {
+        type: Number,
+    
+      },
     },
     {
       timestamps: true,

@@ -1,6 +1,6 @@
 import express from'express' ;
 import multer from '../middleware/multer-config.js';
-import  {RegisterUser,Login,UpdateUser,resetPass,verify, deleteUser, GetUser,forgetPass,changepass,UpdateAvocat,GetallAvocat,GetAvocatByCategorie,GetNews,GetNew} from"../Controller/UserController.js" ;
+import  {RegisterUser,Login,UpdateUser,resetPass,verify, deleteUser, GetUser,forgetPass,changepass,UpdateAvocat,GetallAvocat,GetAvocatByCategorie,GetNews,GetNew,UpdateSignature} from"../Controller/UserController.js" ;
 import  verifyToken from "../middleware/auth.js";
 import multerConfig from '../middleware/multer-config.js';
 
@@ -75,6 +75,7 @@ const router = express.Router();
  *         description: Some server error*
  */
 router.post('/compte',RegisterUser)
+
 /**
  * @swagger
  * /user/Signin:
@@ -200,6 +201,24 @@ router.post('/Signin',Login,verifyToken)
  *
  */
 router.post('/updateUser/:id',multer,UpdateUser);
+/**
+ * @swagger
+ * /user/addSignature/{id}:
+ * 
+ *   post:
+ *     summary: Create a new User
+ *     tags: [User]
+ *     responses:
+ *       200:
+ *         description: The user was successfully created
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       500:
+ *         description: Some server error*
+ */
+ router.post('/addSignature/:id',multer,UpdateSignature)
 /**
  * @swagger
  * /user/UpdateAvocat/{id}:

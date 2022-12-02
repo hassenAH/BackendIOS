@@ -11,14 +11,20 @@ export async function addCase(req , res){
     var title  = req.body.title;
     var description= req.body.description
 
-    
+    var nameUser= req.body.nameUser;
+    var LastnameUser= req.body.LastnameUser;
+    var Prix= req.body.Prix;
+
 
 
 
     // Create user in our database
     var c = await Case.create({
       title,
-      description
+      description,
+      nameUser,
+      LastnameUser,
+      Prix
     });
     
       res.status(200).json({message : "ajout avec succeés",c});
@@ -35,11 +41,13 @@ export async function addCase(req , res){
 
 export async function UpdateCase(req,res){
 
-  const  { title,description,traite } = req.body;
+  const  { title,description,traite,nameUser,LastnameUser,Prix } = req.body;
   
   var c = await Case.findOne({ _id: req.params.id });
+  c.Prix=Prix;
   c.title= title;
- 
+  c.nameUser= nameUser;
+  c.LastnameUser = LastnameUser;
   c.description=description;
   c.traite=traite;
   c.save()
@@ -56,7 +64,7 @@ export async function deleteCase(req,res){
   
     
       try {
-        const  id=req.params.id;
+        var  id=req.params.id;
   
         var c = await Case.findOne({_id:id})
         if(!c)
@@ -65,7 +73,7 @@ export async function deleteCase(req,res){
         c.remove();
         res.status(200).json("categorie Supprime")
       } catch (error) {
-        console.log("prob");
+        console.log(error);
       }
   
 }
@@ -74,7 +82,7 @@ export async function GetCase(req,res){
   
     try {
 
-      const  id=req.params.id;
+      var  id=req.params.id;
 
       var c = await Case.findOne({_id:id})
       if(c)
@@ -84,7 +92,7 @@ export async function GetCase(req,res){
       }else
       res.status(404).json("user not found")
     } catch (error) {
-      console.log("prob");
+      console.log(error);
     }
 
 }
@@ -97,13 +105,33 @@ export async function GetALLCase(req,res){
       var c = await Case.find({})
       if(c)
       {
-        res.send(c)
+        
         res.status(200).json(c)
       }else
       res.status(404).json("pack not found")
     } catch (error) {
-      console.log("prob");
+      console.log(error);
     }
+
+}
+
+export async function GetCasebyUser(req,res){
+  
+  
+  try {
+
+    var a =req.body.nameUser; 
+    var b=req.body.LastnameUser;   
+    var c = await Case.find({ nameUser:a,LastnameUser:b})
+    if(c)
+    {
+      res.send(c)
+      res.status(200).json(c)
+    }else
+    res.status(404).json("pack not found")
+  } catch (error) {
+    console.log(error);
+  }
 
 }
 
