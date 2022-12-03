@@ -6,12 +6,13 @@ import sendEmail from "../middleware/nodemail.js"
 import Token from "../Model/Token.js";
 import crypto from "crypto"
 import verifyToken from "../middleware/auth.js";
-
+import Document from "../Model/Document.js"
 import verifymail from "../Controller/template/templates.js"
 import resetpassword from "../Controller/template/codetemplate.js"
-
+import imgToPDF from "image-to-pdf"
+import imagesToPdf from "images-to-pdf"
 import fs from "fs";
-import path from "path"
+import path from "path";
 
 import axios from "axios";
 import FormData from "form-data";
@@ -237,6 +238,34 @@ export async function UpdateSignature(req,res){
   .catch((error) => {
       return console.error('Request failed:', error);
   });
+   
+   // res.status(404).json("Not found ")
+    
+    
+}
+export async function addDocument(req,res){
+
+ 
+
+  var user = await User.findOne({ _id: req.params.id });
+  if(user)
+  {
+    var id = req.params.id
+    var d = `${req.file.fieldname}`+ '-' + Date.now()+".pdf"
+    var doc = await Document.create({
+      idUser:id,
+      image:d,
+    });
+    
+    await imagesToPdf([`./public/images/${req.file.filename}`], `./public/Document/${d}`)
+       
+    fs.unlinkSync(`./public/images/${req.file.filename}`);
+  
+  
+  res.status(200).json({message : "update avec succeés",doc});
+  }
+ 
+
    
    // res.status(404).json("Not found ")
     
