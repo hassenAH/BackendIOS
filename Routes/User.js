@@ -1,6 +1,6 @@
 import express from'express' ;
 import multer from '../middleware/multer-config.js';
-import  {RegisterUser,Login,UpdateUser,resetPass,verify, deleteUser, GetUser,forgetPass,changepass,UpdateAvocat,GetallAvocat,GetAvocatByCategorie,GetNews,GetNew,UpdateSignature,addDocument} from"../Controller/UserController.js" ;
+import  {RegisterUser,Login,UpdateUser,resetPass,verify, deleteUser, GetUser,forgetPass,changepass,UpdateAvocat,GetallAvocat,GetAvocatByCategorie,GetNews,GetNew,UpdateSignature,addDocument,DeleteDocument,DeleteSignature,FindDocs} from"../Controller/UserController.js" ;
 import  verifyToken from "../middleware/auth.js";
 import multerConfig from '../middleware/multer-config.js';
 
@@ -206,7 +206,7 @@ router.post('/updateUser/:id',multer,UpdateUser);
  * /user/addSignature/{id}:
  * 
  *   post:
- *     summary: Create a new User
+ *     summary: add signature to a User
  *     tags: [User]
  *     responses:
  *       200:
@@ -318,6 +318,48 @@ router.get('/verify/:id',verify);
 router.delete('/delete/:id',deleteUser)
 /**
  * @swagger
+ *  /user/deleteDoc/{id}:
+ *    delete:
+ *      summary: removes a user
+ *      tags: [User]
+ *      parameters:
+ *        - in: path
+ *          name: id
+ *          description:  id
+ *          required: true
+ *          schema:
+ *            type: string
+ *      responses:
+ *        200:
+ *          description: The Document was deleted
+ *        404:
+ *          description: The user was not found
+ *
+ */
+ router.delete('/deleteDoc/:id',DeleteDocument)
+ /**
+ * @swagger
+ *  /user/deleteSign/{id}:
+ *    delete:
+ *      summary: removes a user
+ *      tags: [User]
+ *      parameters:
+ *        - in: path
+ *          name: id
+ *          description:  id
+ *          required: true
+ *          schema:
+ *            type: string
+ *      responses:
+ *        200:
+ *          description: The Document was deleted
+ *        404:
+ *          description: The user was not found
+ *
+ */
+  router.delete('/deleteSign/:id',DeleteSignature)
+/**
+ * @swagger
  *  /user/profil/{id}:
  *    get:
  *      summary: Get a user
@@ -422,7 +464,33 @@ router.post('/getbycategorie',GetAvocatByCategorie)
  *             
  *       500:
  *         description: Some server error
+ * 
  */
   router.post('/getnew',GetNew)
+ /**
+ * @swagger
+ * /user/getdocs/{id}:
+ * 
+ *   post:
+ *     summary: Get all docs
+ *     tags: [User]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: user id
+ *     responses:
+ *       200:
+ *         description: docs found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       500:
+ *         description: Some server error*
+ */
+  router.post('/getdocs/:id',FindDocs)
 
 export default router;

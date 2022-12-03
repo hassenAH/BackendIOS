@@ -257,6 +257,8 @@ export async function addDocument(req,res){
       image:d,
     });
     
+
+    
     await imagesToPdf([`./public/images/${req.file.filename}`], `./public/Document/${d}`)
        
     fs.unlinkSync(`./public/images/${req.file.filename}`);
@@ -271,6 +273,83 @@ export async function addDocument(req,res){
     
     
 }
+export async function FindDocs(req,res){
+
+ 
+
+  var user = await User.findOne({ _id: req.params.id });
+  if(user)
+  {
+    var id = req.params.id
+   
+    var dos = await Document.find({idUser: id})
+    try{
+
+    
+    if(dos)
+    {
+      res.status(200).json(dos)
+    }else
+    res.status(404).json("user dont have docs")
+  } catch (error) {
+    console.log(error);
+  }
+  }
+ 
+
+   
+   // res.status(404).json("Not found ")
+    
+    
+}
+export async function DeleteDocument(req,res){
+
+ 
+
+  var user = await User.findOne({ _id: req.params.id });
+  if(user)
+  {
+    var doc = await Document.findOne({idUser: req.params.id })
+    fs.unlinkSync( `./public/Document/${doc.image}`);
+    doc.remove()
+       
+    
+  
+  
+  res.status(200).json({message : "delete avec succeés"});
+  }
+ 
+
+   
+   // res.status(404).json("Not found ")
+    
+    
+}
+export async function DeleteSignature(req,res){
+
+ 
+
+  var user = await User.findOne({ _id: req.params.id });
+  if(user)
+  {
+    
+    fs.unlinkSync( `./public/signature/${user.signature}`);
+    user.signature=""
+    user.save()
+       
+    
+  
+  
+  res.status(200).json({message : "delete avec succeés"});
+  }
+ 
+
+   
+   // res.status(404).json("Not found ")
+    
+    
+}
+
 
 
 
