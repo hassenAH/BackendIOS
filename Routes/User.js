@@ -1,6 +1,6 @@
 import express from'express' ;
 import multer from '../middleware/multer-config.js';
-import  {RegisterUser,Login,UpdateUser,resetPass,verify, deleteUser, GetUser,forgetPass,changepass,UpdateAvocat,GetallAvocat,GetAvocatByCategorie,GetNews,GetNew,UpdateSignature,addDocument,DeleteDocument,DeleteSignature,FindDocs} from"../Controller/UserController.js" ;
+import  {RegisterUser,Login,UpdateUser,resetPass,verify, deleteUser, GetUser,forgetPass,changepass,UpdateAvocat,GetallAvocat,GetAvocatByCategorie,GetNews,GetNew,UpdateSignature,FindPacks,FindSignature,addDocumentAvocat,addDocumentUser,DeleteDocument,DeleteSignature,FindDocs} from"../Controller/UserController.js" ;
 import  verifyToken from "../middleware/auth.js";
 import multerConfig from '../middleware/multer-config.js';
 
@@ -210,7 +210,7 @@ router.post('/updateUser/:id',multer,UpdateUser);
  *     tags: [User]
  *     responses:
  *       200:
- *         description: The user was successfully created
+ *         description: The signature was successfully created
  *         content:
  *           application/json:
  *             schema:
@@ -224,7 +224,7 @@ router.post('/updateUser/:id',multer,UpdateUser);
  * /user/addDocument/{id}:
  * 
  *   post:
- *     summary: Create a new User
+ *     summary: Create a document user
  *     tags: [User]
  *     responses:
  *       200:
@@ -236,7 +236,25 @@ router.post('/updateUser/:id',multer,UpdateUser);
  *       500:
  *         description: Some server error*
  */
-  router.post('/addDocument/:id',multer,addDocument)
+  router.post('/addDocument/:id',multer,addDocumentUser)
+   /**
+ * @swagger
+ * /user/addDocument/{id}:
+ * 
+ *   post:
+ *     summary: Create a document avocat
+ *     tags: [User]
+ *     responses:
+ *       200:
+ *         description: The user was successfully created
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       500:
+ *         description: Some server error*
+ */
+    router.post('/addDocument/:id',multer,addDocumentAvocat)
 /**
  * @swagger
  * /user/UpdateAvocat/{id}:
@@ -492,5 +510,55 @@ router.post('/getbycategorie',GetAvocatByCategorie)
  *         description: Some server error*
  */
   router.post('/getdocs/:id',FindDocs)
-
+  /**
+ * @swagger
+ * /user/getpack/{id}:
+ * 
+ *   post:
+ *     summary: Get all pack
+ * 
+ *     tags: [User]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: user id
+ *     responses:
+ *       200:
+ *         description: docs foundn  
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       500:
+ *         description: Some server error*
+ */
+   router.post('/getpack/:id',FindPacks)
+ /**
+ * @swagger
+ * /user/getsignature/{id}:
+ * 
+ *   post:
+ *     summary: Get signature
+ *     tags: [User]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: user id
+ *     responses:
+ *       200:
+ *         description: docs found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       500:
+ *         description: Some server error*
+ */
+  router.post('/getsignature/:id',FindSignature)
 export default router;

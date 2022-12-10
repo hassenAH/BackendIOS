@@ -1,6 +1,6 @@
 import express from'express' ;
 import multer from '../middleware/multer-config.js';
-import  {GetRendezVous,GetALLRendezVous,addRendezVous,UpdateRendezVous,deleteRendezVous} from"../Controller/RendezVousController.js" ;
+import  {GetRendezVous,GetALLRendezVous,addRendezVous,UpdateRendezVous,deleteRendezVous,GetALLRendezVousByClient,GetALLRendezVousByAvocat} from"../Controller/RendezVousController.js" ;
 
 
 
@@ -43,16 +43,39 @@ const router = express.Router();
  */
 /**
  * @swagger
- * /RendezVous/add:
+ * /RendezVous/getbyAvocat:
  *   post:
- *     summary: Create a new RendezVous
+ *     summary: get Avocat Rendez vous
  *     tags: [RendezVous]
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/RendezVous'
+ *             idAvocat:String
+ *     responses:
+ *       200:
+ *         description: The RendezVous showed
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/RendezVous'
+ *       500:
+ *         description: Some server error
+ */
+router.post('/getbyAvocat',GetALLRendezVousByAvocat)
+/**
+ * @swagger
+ * /RendezVous/getbyClient:
+ *   post:
+ *     summary: get CLient Rendez vous
+ *     tags: [RendezVous]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *            idUser:String
  *     responses:
  *       200:
  *         description: The RendezVous was successfully created
@@ -63,7 +86,8 @@ const router = express.Router();
  *       500:
  *         description: Some server error
  */
-router.post('/add',addRendezVous)
+ router.post('/getbyClient',GetALLRendezVousByClient)
+
 
 
 /**

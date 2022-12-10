@@ -14,6 +14,14 @@ const PackSchema = mongoose.Schema({
         type: String,
         require: true,
       },
+      idUser: {
+        type: String,
+        require: true,
+      },
+      title: {
+        type: String,
+        require: true,
+      },
       prix: {
         type: Number,
         require: true,

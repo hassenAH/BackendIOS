@@ -8,8 +8,9 @@ export async function addRendezVous(req , res){
  
  try {
     
-    var name  = req.body.name;
+    var idUser  = req.body.idUser;
     var date= req.body.date
+    var idAvocat  = req.body.idAvocat;
 
     
 
@@ -17,7 +18,8 @@ export async function addRendezVous(req , res){
 
     // Create user in our database
     var c = await RendezVous.create({
-      name,
+      idUser,
+      idAvocat,
       date
     });
     
@@ -35,10 +37,10 @@ export async function addRendezVous(req , res){
 
 export async function UpdateRendezVous(req,res){
 
-  const  { name,date } = req.body;
+  const  { date } = req.body;
   
   var c = await RendezVous.findOne({ _id: req.params.id });
-  c.name= name;
+  
  
   c.date=date;
   
@@ -79,7 +81,7 @@ export async function GetRendezVous(req,res){
       var c = await RendezVous.findOne({_id:id})
       if(c)
       {
-        res.send(c)
+        
         res.status(200).json(c)
       }else
       res.status(404).json("RendezVous not found")
@@ -106,7 +108,42 @@ export async function GetALLRendezVous(req,res){
     }
 
 }
+export async function GetALLRendezVousByAvocat(req,res){
+  
+  
+  try {
 
+
+    var c = await RendezVous.find({idAvocat:req.body.idAvocat})
+    if(c)
+    {
+      
+      res.status(200).json(c)
+    }else
+    res.status(404).json("RendezVous not found")
+  } catch (error) {
+    console.log("prob");
+  }
+
+}
+export async function GetALLRendezVousByClient(req,res){
+  
+  
+  try {
+
+
+    var c = await RendezVous.find({idUser:req.body.idUser})
+    if(c)
+    {
+      
+      res.status(200).json(c)
+    }else
+    res.status(404).json("RendezVous not found")
+  } catch (error) {
+    console.log("prob");
+  }
+
+}
 
 
 

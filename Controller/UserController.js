@@ -7,6 +7,7 @@ import Token from "../Model/Token.js";
 import crypto from "crypto"
 import verifyToken from "../middleware/auth.js";
 import Document from "../Model/Document.js"
+import Pack from "../Model/Pack.js"
 import verifymail from "../Controller/template/templates.js"
 import resetpassword from "../Controller/template/codetemplate.js"
 import imgToPDF from "image-to-pdf"
@@ -23,7 +24,7 @@ export async function RegisterUser(req , res){
  
  try {
     // Get user input
-    const { first_name , last_name, email , password } = req.body;
+    var { first_name , last_name, email , password } = req.body;
 
     // Validate user input
     if (!(email && password && first_name && last_name)) {
@@ -33,7 +34,7 @@ export async function RegisterUser(req , res){
 
     // check if user already exist
     // Validate if user exist in our database
-    const oldUser = await User.findOne({email});
+    var oldUser = await User.findOne({email});
 
     if (oldUser) {
       return res.status(409).send("User Already Exist. Please Login");
@@ -41,10 +42,10 @@ export async function RegisterUser(req , res){
 
     //Encrypt user password
     
-   const  encryptedPassword = await bcrypt.hash(password, 10);
+   var  encryptedPassword = await bcrypt.hash(password, 10);
 
     // Create user in our database
-    const user = await User.create({
+    var user = await User.create({
       first_name,
       last_name,
       email: email.toLowerCase(), // sanitize: convert email to lowercase
@@ -63,9 +64,9 @@ export async function RegisterUser(req , res){
 
   
 
-    const message = `${process.env.URL}user/verify/${user.id}`;
-    const name = user.first_name+" "+user.last_name;
-    const v = await verifymail(name,message);
+    var message = `http://172.17.5.29:5000//user/verify/${user.id}`;
+    var name = user.first_name+" "+user.last_name;
+    var v = await verifymail(name,message);
       await sendEmail(user.email, "Verify Email", v);
       res.status(200).json({message : "ajout avec succeés",user});
       
@@ -78,7 +79,7 @@ export async function RegisterUser(req , res){
 };
 export async function verify(req,res){
   try {
-    const user = await User.findOne({ _id: req.params.id });
+    var user = await User.findOne({ _id: req.params.id });
     user.verified = true;
     user.save();
    
@@ -99,7 +100,7 @@ export async function Login(req,res){
  // Our login logic starts here
  try {
   // Get user input
-  const {email , password } = req.body;
+  var {email , password } = req.body;
 
 
   // Validate user input
@@ -107,7 +108,7 @@ export async function Login(req,res){
     res.status(400).send("All input is required");
   }
     // Validate if user exist in our database
-    const user = await User.findOne({ email: email.toLowerCase() });
+    var user = await User.findOne({ email: email.toLowerCase() });
   
    if(user.verified)
    {
@@ -139,16 +140,16 @@ export async function Login(req,res){
 }
 export async function UpdateUser(req,res){
 
-  const  { first_name , last_name, email , password } = req.body;
-  const  encryptedPassword = await bcrypt.hash(password, 10);
-  const user = await User.findOne({ _id: req.params.id });
+  var  { first_name , last_name, email } = req.body;
+ 
+  var user = await User.findOne({ _id: req.params.id });
   
   user.last_name= last_name;
   user.first_name= first_name;
   user.email=email
-  user.password=encryptedPassword
+ 
   user.image=`${req.file.filename}`
-  user.save()
+  user.save() 
     
   
   res.status(200).json({message : "update avec succeés",user});
@@ -182,16 +183,27 @@ export async function UpdateUser(req,res){
 }
 export async function UpdateAvocat(req,res){
 
-  var  categorie = req.body.categorie;
+  var  specialite = req.body.categorie;
   var experience=req.body.experience;
   var user = await User.findOne({ _id: req.params.id });
   
   
   user.experience= experience
-  user.specialite = categorie
+  user.specialite = specialite
   user.role="Avocat"
   user.save()
-    
+  /*var id = user.id
+  var d = `${req.file.fieldname}`+ '-' + Date.now()+".pdf"
+  var role = user.role
+  var doc = await Document.create({
+    idUser:id,
+    role:role,
+    image:d,
+  });
+  await imagesToPdf([`./public/images/${req.file.filename}`], `./public/Document/Avocat/${d}`)
+       
+  fs.unlinkSync(`./public/images/${req.file.filename}`);*/
+
   
   res.status(200).json({message : "update avec succeés",user});
   
@@ -238,12 +250,12 @@ export async function UpdateSignature(req,res){
   .catch((error) => {
       return console.error('Request failed:', error);
   });
-   
+
    // res.status(404).json("Not found ")
     
     
 }
-export async function addDocument(req,res){
+export async function addDocumentAvocat(req,res){
 
  
 
@@ -252,30 +264,71 @@ export async function addDocument(req,res){
   {
     var id = req.params.id
     var d = `${req.file.fieldname}`+ '-' + Date.now()+".pdf"
+    var role = req.body.role
     var doc = await Document.create({
       idUser:id,
+      role:role,
       image:d,
     });
     
+    
 
     
-    await imagesToPdf([`./public/images/${req.file.filename}`], `./public/Document/${d}`)
+    await imagesToPdf([`./public/images/${req.file.filename}`], `./public/Document/Avocat/${d}`)
        
     fs.unlinkSync(`./public/images/${req.file.filename}`);
   
   
   res.status(200).json({message : "update avec succeés",doc});
   }
- 
-
    
    // res.status(404).json("Not found ")
     
     
 }
-export async function FindDocs(req,res){
+export async function addDocumentUser(req,res){
 
  
+
+  var user = await User.findOne({ _id: req.params.id });
+  if(user)
+  {
+    var id = req.params.id
+    var d = `${req.file.fieldname}`+ '-' + Date.now()+".pdf"
+    var role= req.body.role
+    var doc = await Document.create({
+      idUser:id,
+      role:role,
+      image:d,
+    });
+    
+
+    
+    await imagesToPdf([`./public/images/${req.file.filename}`], `./public/Document/User/${d}`)
+       
+    fs.unlinkSync(`./public/images/${req.file.filename}`);
+  
+  
+  res.status(200).json({message : "update avec succeés",doc});
+  }
+   
+   // res.status(404).json("Not found ")
+    
+    
+}
+export async function FindSignature(req,res){
+
+  var user = await User.findOne({ _id: req.params.id });
+  if(user)
+  {
+   
+    
+      res.status(200).json(user.signature)
+  }
+   
+   // res.status(404).json("Not found ")
+}
+export async function FindDocs(req,res){
 
   var user = await User.findOne({ _id: req.params.id });
   if(user)
@@ -295,12 +348,34 @@ export async function FindDocs(req,res){
     console.log(error);
   }
   }
- 
 
    
    // res.status(404).json("Not found ")
+}
+export async function FindPacks(req,res){
+
+  var user = await User.findOne({ _id: req.params.id });
+  if(user)
+  {
+    var id = req.params.id
+   
+    var pack = await Pack.find({idUser: req.params.id})
+    try{
+
+
     
-    
+    if(pack)
+    {
+      res.status(200).json(pack)
+    }else
+    res.status(404).json("user dont have docs")
+  } catch (error) {
+    console.log(error);
+  }
+  }
+
+   
+   // res.status(404).json("Not found ")
 }
 export async function DeleteDocument(req,res){
 
@@ -512,11 +587,12 @@ export async function GetUser(req,res){
 
 
   import SerpApi from 'google-search-results-nodejs';
+
   
   export async function GetNews(req,res){
   try
   {
-    const search = new SerpApi.GoogleSearch("4a1ba614f73cc9208a3ebe1e55cfa018802aa03588e1532dd1283ae690cf163e");
+    const search = new SerpApi.GoogleSearch("aaae70677064094c90653046e24d46d83c5eb1625785ccc88fb9433ca5771963");
   
     const params = {
       q: "article+juridique+tunisie",
@@ -549,7 +625,7 @@ export async function GetUser(req,res){
 
     var a =req.body.search;    
   
-    const search = new SerpApi.GoogleSearch("4a1ba614f73cc9208a3ebe1e55cfa018802aa03588e1532dd1283ae690cf163e");
+    const search = new SerpApi.GoogleSearch("aaae70677064094c90653046e24d46d83c5eb1625785ccc88fb9433ca5771963");
   
   const params = {
     q: a,

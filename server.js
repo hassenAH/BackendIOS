@@ -3,7 +3,7 @@ import UserRoute from"./Routes/User.js"
 import mongoose from"mongoose";
 import CategorieRoute from"./Routes/Categorie.js"
 
-import PackRoute from"./Routes/Categorie.js"
+import PackRoute from"./Routes/Pack.js"
 import CaseRoute from"./Routes/Case.js"
 import RendezVousRoute from"./Routes/RendezVous.js"
 
@@ -61,7 +61,7 @@ app.use(express.json());
 
 app.use("/user", UserRoute);
 app.use("/Case",CaseRoute);
-app.use("/Pack",PackRoute);
+app.use("/pack",PackRoute);
 app.use("/RendezVous",RendezVousRoute);
 app.use("/categorie",CategorieRoute);
 app.use('/api-docs',swaggerUi.serve,swaggerUi.setup(swaggerSpec))

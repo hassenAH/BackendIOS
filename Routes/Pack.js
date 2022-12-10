@@ -23,6 +23,9 @@ const router = express.Router();
  *         name:
  *           type: string
  *           description: first name of a Pack
+ *         title:
+ *           type: string
+ *           description: title of a Pack
  *         description:
  *           type: string
  *           description: description of a Pack
@@ -33,6 +36,9 @@ const router = express.Router();
  *          
  *       example:
  *         name: pack gold
+ *         id: 63862f0d8a99779c8ceec914
+ *         title
+ * : "divorce enticipe"
  *         description: analyse de dossier et frais de demande avec suivie de dossier
  *         prix: 150
  *         
@@ -46,9 +52,9 @@ const router = express.Router();
  */
 /**
  * @swagger
- * /Pack/add:
+ * /pack/add:
  *   post:
- *     summary: Create a new User
+ *     summary: Create a new pack
  *     tags: [Pack]
  *     requestBody:
  *       required: true
@@ -152,7 +158,7 @@ router.delete('/delete/:id',deletepack)
 router.get('/:id',Getpack)
 /**
  * @swagger
- *  /Pack:
+ *  /pack:
  *    get:
  *      summary: Get a Pack
  *      tags: [Pack]

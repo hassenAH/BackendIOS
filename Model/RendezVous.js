@@ -10,7 +10,11 @@ const { Schema , model} = mongoose;
 
 
 const RendezVousSchema = mongoose.Schema({
-      name: {
+      idUser: {
+        type: String,
+        require: true,
+      },
+      idAvocat: {
         type: String,
         require: true,
       },

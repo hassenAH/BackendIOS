@@ -16,7 +16,7 @@ export async function addCategorie(req , res){
     
 
     // Create user in our database
-    const categorie = await Categorie.create({
+    var categorie = await Categorie.create({
       name,
       image
     });
@@ -65,7 +65,7 @@ export async function UpdateCategorie(req,res){
 
   const  { name } = req.body;
   
-  const categorie = await Categorie.findOne({ _id: req.params.id });
+  var categorie = await Categorie.findOne({ _id: req.params.id });
   categorie.name= name;
  
   categorie.image=`${req.file.filename}`

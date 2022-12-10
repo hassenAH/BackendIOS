@@ -14,6 +14,10 @@ const DocumentSchema = mongoose.Schema({
         type: String,
         require: true,
       },
+      role: {
+        type: String,
+    
+      },
       image: {
         type: String,
     
