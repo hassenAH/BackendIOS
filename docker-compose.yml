@@ -16,10 +16,11 @@ services:
   mongo:
     image: mongo:6
     ports:
-      - "27017:27017"
+      - "3001:27017"
     volumes:
       - ./database:/data/bizos
     networks:
+
       - bizos
    
 volumes:

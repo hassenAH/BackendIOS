@@ -443,7 +443,7 @@ router.get('/profil/:id',GetUser)
  *          description: The user was not found
  *
  */
-router.post('/getbycategorie',GetAvocatByCategorie)
+router.get('/getbycategorie',GetAvocatByCategorie)
 /**
  * @swagger
  *  /user/getNews:

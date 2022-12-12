@@ -185,9 +185,10 @@ export async function UpdateAvocat(req,res){
 
   var  specialite = req.body.categorie;
   var experience=req.body.experience;
+  var loc = req.body.location;
   var user = await User.findOne({ _id: req.params.id });
   
-  
+  user.location = loc;
   user.experience= experience
   user.specialite = specialite
   user.role="Avocat"
