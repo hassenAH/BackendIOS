@@ -6,7 +6,7 @@ import CategorieRoute from"./Routes/Categorie.js"
 import PackRoute from"./Routes/Pack.js"
 import CaseRoute from"./Routes/Case.js"
 import RendezVousRoute from"./Routes/RendezVous.js"
-
+import MessageRoute from "./Routes/Message.js";
 import dotenv from"dotenv" ;
 import swaggerJSDoc from 'swagger-jsdoc'
 import swaggerUi from 'swagger-ui-express'
@@ -64,6 +64,7 @@ app.use("/Case",CaseRoute);
 app.use("/pack",PackRoute);
 app.use("/RendezVous",RendezVousRoute);
 app.use("/categorie",CategorieRoute);
+app.use("/dis",MessageRoute)
 app.use('/api-docs',swaggerUi.serve,swaggerUi.setup(swaggerSpec))
 app.use(session({
   secret: "secret",

@@ -572,7 +572,7 @@ export async function GetUser(req,res){
       var user = await User.find({specialite: req.body.categorie})
       if(user)
       {
-        res.send(user)
+      
         res.status(200).json(user)
       }else
       res.status(404).json("user not found")
