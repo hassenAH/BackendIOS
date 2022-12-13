@@ -37,8 +37,7 @@ const router = express.Router();
  *       example:
  *         name: pack gold
  *         id: 63862f0d8a99779c8ceec914
- *         title
- * : "divorce enticipe"
+ *         title: "divorce enticipe"
  *         description: analyse de dossier et frais de demande avec suivie de dossier
  *         prix: 150
  *         

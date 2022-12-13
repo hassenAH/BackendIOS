@@ -570,7 +570,8 @@ export async function GetUser(req,res){
 
       
 
-      var user = await User.find({specialite: req.body.categorie})
+      var user = await User.find({specialite: req.params.categorie.replace(/[A-Z]/g, ' $&').trim()
+    })
       if(user)
       {
       

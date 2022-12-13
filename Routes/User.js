@@ -443,7 +443,7 @@ router.get('/profil/:id',GetUser)
  *          description: The user was not found
  *
  */
-router.get('/getbycategorie',GetAvocatByCategorie)
+router.get('/getbycategorie/:categorie',GetAvocatByCategorie)
 /**
  * @swagger
  *  /user/getNews:
@@ -535,7 +535,7 @@ router.get('/getbycategorie',GetAvocatByCategorie)
  *       500:
  *         description: Some server error*
  */
-   router.post('/getpack/:id',FindPacks)
+router.get('/getpack/:id',FindPacks)
  /**
  * @swagger
  * /user/getsignature/{id}:
