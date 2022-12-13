@@ -35,6 +35,10 @@ const CaseSchema = mongoose.Schema({
         type: Number,
     
       },
+      idAvocat: {
+        type: String,
+    
+      },
     },
     {
       timestamps: true,

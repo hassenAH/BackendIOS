@@ -1,6 +1,6 @@
 import express from'express' ;
 import multer from '../middleware/multer-config.js';
-import  {GetCase,GetALLCase,addCase,UpdateCase,deleteCase,GetCasebyUser} from"../Controller/CaseController.js" ;
+import  {GetCase,GetALLCase,addCase,UpdateCase,deleteCase,GetCasebyUser,GetCasebyAvocat} from"../Controller/CaseController.js" ;
 
 
 
@@ -38,6 +38,10 @@ const router = express.Router();
  *         Prix:
  *           type: Number
  *           description: etat of a Case
+ *         idAvocat:
+ *           type: string
+ *           description: name of a user
+ *         
  *           
  *         
  *          
@@ -48,6 +52,7 @@ const router = express.Router();
  *         nameUser : hassen
  *         LastnameUser: ahmadi
  *         Prix : 2000
+ *         idAvocat : 638f7b19192784c292ae9e38
  * 
  *         
  *
@@ -82,7 +87,29 @@ const router = express.Router();
  */
 router.post('/add',addCase)
 
-
+/**
+ * @swagger
+ * /Case/getCasebyUser:
+ *   post:
+ *     summary: get Case by User
+ *     tags: [Case]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Case'
+ *     responses:
+ *       200:
+ *         description: The Case was successfully created
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Case'
+ *       500:
+ *         description: Some server error
+ */
+ router.post('/getCasebyUser',GetCasebyUser)
 /**
  * @swagger
  * /Case/update/{id}:
@@ -164,6 +191,31 @@ router.delete('/delete/:id',deleteCase)
  *
  */
 router.get('/:id',GetCase)
+/**
+ * @swagger
+ *  /Case/getCaseByAvocat/{id}:
+ *    get:
+ *      summary: Get a Case by Avocat
+ *      tags: [Case]
+ *      parameters:
+ *        - in: path
+ *          name: id
+ *          description:  id
+ *          required: true
+ *          schema:
+ *            type: string
+ *      responses:
+ *        200:
+ *          description: Case by its id
+ *          content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Case'
+ *        404:
+ *          description: The Case was not found
+ *
+ */
+ router.get('/getCaseByAvocat/:idAvocat',GetCasebyAvocat)
 /**
  * @swagger
  *  /Case:

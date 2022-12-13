@@ -10,7 +10,7 @@ export async function addCase(req , res){
     
     var title  = req.body.title;
     var description= req.body.description
-
+    var idAvocat = req.body.idAvocat
     var nameUser= req.body.nameUser;
     var LastnameUser= req.body.LastnameUser;
     var Prix= req.body.Prix;
@@ -24,7 +24,8 @@ export async function addCase(req , res){
       description,
       nameUser,
       LastnameUser,
-      Prix
+      Prix,
+      idAvocat
     });
     
       res.status(200).json({message : "ajout avec succeés",c});
@@ -125,7 +126,7 @@ export async function GetCasebyUser(req,res){
     var c = await Case.find({ nameUser:a,LastnameUser:b})
     if(c)
     {
-      res.send(c)
+    
       res.status(200).json(c)
     }else
     res.status(404).json("pack not found")
@@ -134,7 +135,24 @@ export async function GetCasebyUser(req,res){
   }
 
 }
+export async function GetCasebyAvocat(req,res){
+  
+  
+  try {
 
+      
+    var c = await Case.find({ idAvocat:req.params.idAvocat})
+    if(c)
+    {
+    
+      res.status(200).json(c)
+    }else
+    res.status(404).json("pack not found")
+  } catch (error) {
+    console.log(error);
+  }
+
+}
 
 
 
