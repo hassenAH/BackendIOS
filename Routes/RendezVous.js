@@ -20,7 +20,10 @@ const router = express.Router();
  *         id:
  *           type: string
  *           description: The Auto-generated id of a categorie
- *         name:
+ *         idUser:
+ *           type: string
+ *           description: title of a RendezVous
+ *         idAvocat:
  *           type: string
  *           description: title of a RendezVous
  *         date:
@@ -30,7 +33,8 @@ const router = express.Router();
  *         
  *          
  *       example:
- *         name: divorce case
+ *         idUser : 63862f0d8a99779c8ceec914
+ *         idAvocat : 63862f4f8a99779c8ceec921
  *         date: 09/12/2023
  *         
  *
@@ -41,6 +45,29 @@ const router = express.Router();
  *    name: RendezVous
  *    description: RendezVous
  */
+/**
+ * @swagger
+ * /RendezVous/add:
+ *   post:
+ *     summary: Create a new RendezVous
+ *     tags: [RendezVous]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/RendezVous'
+ *     responses:
+ *       200:
+ *         description: The RendezVous was successfully created
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/RendezVous'
+ *       500:
+ *         description: Some server error
+ */
+ router.post('/add',addRendezVous)
 /**
  * @swagger
  * /RendezVous/getbyAvocat:

@@ -9,18 +9,16 @@ export async function addRendezVous(req , res){
  try {
     
     var idUser  = req.body.idUser;
-    var date= req.body.date
+    var Date= req.body.date
     var idAvocat  = req.body.idAvocat;
 
     
-
-
 
     // Create user in our database
     var c = await RendezVous.create({
       idUser,
       idAvocat,
-      date
+      Date
     });
     
       res.status(200).json({message : "ajout avec succeés",c});
