@@ -1,16 +1,16 @@
 import bcrypt from"bcrypt"
-import jwt from "jsonwebtoken"
+
 import otpGenerator from "otp-generator";
 import User from "../Model/User.js"
 import sendEmail from "../middleware/nodemail.js"
 import Token from "../Model/Token.js";
 import crypto from "crypto"
-import verifyToken from "../middleware/auth.js";
+
 import Document from "../Model/Document.js"
 import Pack from "../Model/Pack.js"
 import verifymail from "../Controller/template/templates.js"
 import resetpassword from "../Controller/template/codetemplate.js"
-import imgToPDF from "image-to-pdf"
+
 import imagesToPdf from "images-to-pdf"
 import fs from "fs";
 import path from "path";
@@ -18,6 +18,39 @@ import path from "path";
 import axios from "axios";
 import FormData from "form-data";
 
+import fetch from 'node-fetch';
+
+export async function Pay(req , res){
+const body = {receiverWalletId: "6398f7a008ec811bcda49054",amount : req.body.prix,token : "TND",type : "immediate",
+description: "payment description",
+lifespan: 10,
+feesIncluded: true,
+firstName: req.body.first_name,
+lastName: req.body.last_name,
+phoneNumber: "22777777",
+email: req.body.email,
+orderId: "1234657",
+webhook: "https://merchant.tech/api/notification_payment",
+silentWebhook: true,
+successUrl: "https://dev.konnect.network/gateway/payment-success",
+failUrl: "https://dev.konnect.network/gateway/payment-failure",
+checkoutForm: true,
+acceptedPaymentMethods: [
+"wallet",
+"bank_card",
+"e-DINAR"
+]  };
+
+const response = await fetch('https://api.preprod.konnect.network/api/v2/payments/init-payment', {
+	method: 'post',
+	body: JSON.stringify(body),
+	headers: {'Content-Type': 'application/json','x-api-key': '6398f7a008ec811bcda49053:9v1o3O7FjyG1KbjfVFw0D'}
+});
+const data = await response.json();
+console.log(data);
+res.status(200).json({message : "payment avec succeés",data});
+
+}
 
 
 export async function RegisterUser(req , res){

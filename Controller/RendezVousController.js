@@ -112,10 +112,10 @@ export async function GetALLRendezVousByAvocat(req,res){
   try {
 
 
-    var c = await RendezVous.find({idAvocat:req.body.idAvocat})
+    var c = await RendezVous.find({idAvocat:req.params.idAvocat})
     if(c)
     {
-      
+      res.setHeader('Content-Type', 'application/json')
       res.status(200).json(c)
     }else
     res.status(404).json("RendezVous not found")

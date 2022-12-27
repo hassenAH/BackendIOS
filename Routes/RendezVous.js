@@ -1,5 +1,4 @@
 import express from'express' ;
-import multer from '../middleware/multer-config.js';
 import  {GetRendezVous,GetALLRendezVous,addRendezVous,UpdateRendezVous,deleteRendezVous,GetALLRendezVousByClient,GetALLRendezVousByAvocat} from"../Controller/RendezVousController.js" ;
 
 
@@ -70,27 +69,37 @@ const router = express.Router();
  router.post('/add',addRendezVous)
 /**
  * @swagger
- * /RendezVous/getbyAvocat:
+ * /RendezVous/getbyAvocat/{idAvocat}:
  *   post:
- *     summary: get Avocat Rendez vous
+ *     summary: get RendezVous by idAvocat
  *     tags: [RendezVous]
+ *     parameters:
+ *       - in: path
+ *         name: idAvocat
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: idAvocat 
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             idAvocat:String
+ *             $ref: '#/components/schemas/RendezVous'
  *     responses:
  *       200:
- *         description: The RendezVous showed
+ *         decsription: The RendezVous was updated
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/RendezVous'
+ *       404:
+ *         description: RendezVous was not found.
  *       500:
- *         description: Some server error
+ *         description: Some errors happend.
+ *
  */
-router.post('/getbyAvocat',GetALLRendezVousByAvocat)
+router.post('/getbyAvocat/:idAvocat',GetALLRendezVousByAvocat)
 /**
  * @swagger
  * /RendezVous/getbyClient:

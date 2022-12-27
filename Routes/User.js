@@ -1,6 +1,6 @@
 import express from'express' ;
 import multer from '../middleware/multer-config.js';
-import  {RegisterUser,Login,UpdateUser,resetPass,verify, deleteUser, GetUser,forgetPass,changepass,UpdateAvocat,GetallAvocat,GetAvocatByCategorie,GetNews,GetNew,UpdateSignature,FindPacks,FindSignature,addDocumentAvocat,addDocumentUser,DeleteDocument,DeleteSignature,FindDocs} from"../Controller/UserController.js" ;
+import  {Pay,RegisterUser,Login,UpdateUser,resetPass,verify, deleteUser, GetUser,forgetPass,changepass,UpdateAvocat,GetallAvocat,GetAvocatByCategorie,GetNews,GetNew,UpdateSignature,FindPacks,FindSignature,addDocumentAvocat,addDocumentUser,DeleteDocument,DeleteSignature,FindDocs} from"../Controller/UserController.js" ;
 import  verifyToken from "../middleware/auth.js";
 import multerConfig from '../middleware/multer-config.js';
 
@@ -75,6 +75,29 @@ const router = express.Router();
  *         description: Some server error*
  */
 router.post('/compte',RegisterUser)
+/**
+ * @swagger
+ * /user/pay:
+ *   post:
+ *     summary: Pay 
+ *     tags: [User]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/User'
+ *     responses:
+ *       200:
+ *         description: The user was successfully created
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       500:
+ *         description: Some server error*
+ */
+ router.post('/pay',Pay)
 
 /**
  * @swagger
