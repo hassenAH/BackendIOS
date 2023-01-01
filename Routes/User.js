@@ -1,6 +1,6 @@
 import express from'express' ;
 import multer from '../middleware/multer-config.js';
-import  {Pay,RegisterUser,Login,UpdateUser,resetPass,verify, deleteUser, GetUser,forgetPass,changepass,UpdateAvocat,GetallAvocat,GetAvocatByCategorie,GetNews,GetNew,UpdateSignature,FindPacks,FindSignature,addDocumentAvocat,addDocumentUser,DeleteDocument,DeleteSignature,FindDocs} from"../Controller/UserController.js" ;
+import  {getQRByUser,CreateQR,Pay,RegisterUser,Login,UpdateUser,resetPass,verify, deleteUser, GetUser,forgetPass,changepass,UpdateAvocat,GetallAvocat,GetAvocatByCategorie,GetNews,GetNew,UpdateSignature,FindPacks,FindSignature,addDocumentAvocat,addDocumentUser,DeleteDocument,DeleteSignature,FindDocs} from"../Controller/UserController.js" ;
 import  verifyToken from "../middleware/auth.js";
 import multerConfig from '../middleware/multer-config.js';
 
@@ -75,6 +75,8 @@ const router = express.Router();
  *         description: Some server error*
  */
 router.post('/compte',RegisterUser)
+router.get('/qr/:id/:idUser',CreateQR)
+router.get('/qr/:idUser',getQRByUser)
 /**
  * @swagger
  * /user/pay:

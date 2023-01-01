@@ -1,4 +1,4 @@
-import express from "express"
+import express, { response } from "express"
 import UserRoute from"./Routes/User.js"
 import mongoose from"mongoose";
 import CategorieRoute from"./Routes/Categorie.js"
@@ -112,7 +112,9 @@ app.get('/auth/facebook',
 ));
 
 passport.serializeUser(function (user, done){ 
-  console.log(user)
+  
+  var res = response
+  res.send(user)
   
   return done(null, user.id)
 } )

@@ -20,6 +20,43 @@ import FormData from "form-data";
 
 import fetch from 'node-fetch';
 
+import  QRCode  from 'qrcode';
+import Payement from "../Model/Payement.js";
+export async function getQRByUser(req,res)
+{
+  try {
+
+
+    var pay = await Payement.find({idUser:req.params.idUser})
+    if(pay)
+    {
+      
+      res.status(200).json(pay)
+    }else
+    res.status(404).json("pack not found")
+  } catch (error) {
+    console.log("prob");
+  }
+}
+export async function CreateQR(req,res)
+{
+  var pay = await Payement.create({
+    idUser:req.params.idUser,
+    image:`${req.params.id}.png`,
+    url: `https://api.preprod.konnect.network/api/v2/payments/${req.params.id}`
+    
+  });
+
+  QRCode.toFile(`./public/QRcode/${req.params.id}.png`, `https://api.preprod.konnect.network/api/v2/payments/${req.params.id}`, {
+    color: {
+      dark: '#000000 ',  // Blue dots
+      light: '#0000' // Transparent background
+    }
+  }, function (err) {
+    if (err) throw err
+    res.status(200).json(pay)
+  })
+}
 export async function Pay(req , res){
 const body = {receiverWalletId: "6398f7a008ec811bcda49054",amount : req.body.prix,token : "TND",type : "immediate",
 description: "payment description",
